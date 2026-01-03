@@ -1,9 +1,8 @@
 plugins {
-    kotlin("jvm")
+    `maven-publish`
 }
 
 group = "gg.aquatic.crates"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
