@@ -1,10 +1,12 @@
 package gg.aquatic.crates.editor.handlers
 
+import gg.aquatic.crates.ClickType
 import gg.aquatic.crates.editor.EditorClickHandler
 import gg.aquatic.crates.input.impl.ChatInput
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.entity.Player
+import java.util.Optional
 
 /**
  * A handler that prompts the player in chat.
@@ -15,7 +17,12 @@ class ChatInputHandler<T>(
     private val parser: (String) -> T?
 ) : EditorClickHandler<T> {
 
-    override fun handle(player: Player, current: T, update: (T?) -> Unit) {
+    override fun handle(
+        player: Player,
+        current: T,
+        update: (T?) -> Unit,
+        clickType: ClickType
+    ) {
         player.closeInventory()
         player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(prompt))
 
@@ -31,9 +38,21 @@ class ChatInputHandler<T>(
         // Shorthand for simple Strings
         fun forString(prompt: String) = ChatInputHandler(prompt) { it }
 
+        fun forOptionalString(prompt: String) = ChatInputHandler(prompt) { str ->
+            if (str.lowercase() == "null") Optional.empty()
+            else Optional.of(str)
+        }
+
         // Shorthand for Adventure Components
         fun forComponent(prompt: String) = ChatInputHandler(prompt) {
             MiniMessage.miniMessage().deserialize(it)
         }
+
+        fun forOptionalComponent(prompt: String) = ChatInputHandler(prompt) { str ->
+            if (str.lowercase() == "null") Optional.empty()
+            else Optional.of(MiniMessage.miniMessage().deserialize(str))
+        }
+
+        fun forInteger(prompt: String) = ChatInputHandler(prompt) { it.toIntOrNull() }
     }
 }

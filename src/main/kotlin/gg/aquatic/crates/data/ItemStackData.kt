@@ -20,10 +20,7 @@ class ItemStackData(
         displayIcon = { mat ->
             ItemStack(mat).apply { editMeta { it.displayName(Component.text("Change Material")) } }
         },
-        clickHandler = { player, current, update ->
-            // Logic to open a Material Selector GUI
-            // update(selectedMaterial)
-        }
+        clickHandler = ChatInputHandler("Enter material name: ") { Material.matchMaterial(it) }
     )
 
     // 2. Display Name Editor
@@ -55,10 +52,7 @@ class ItemStackData(
                 setAmount(amt.coerceIn(1, 64))
             }
         },
-        clickHandler = { player, current, update ->
-            // Simple logic: Left click +1, Right click -1
-            // update(current + 1)
-        }
+        clickHandler = ChatInputHandler.forInteger("Enter amount:")
     )
 
     // 4. Lore Editor (Recursive/Nested)
@@ -70,7 +64,7 @@ class ItemStackData(
                 editMeta { it.displayName(Component.text("Edit Lore (${lines.size} lines)")) }
             }
         },
-        clickHandler = { player, current, update ->
+        clickHandler = { player, current, update, click ->
             // Open a specific Lore Editor GUI
         }
     )
