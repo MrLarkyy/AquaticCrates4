@@ -3,7 +3,7 @@ plugins {
     id("com.gradleup.shadow") version "9.2.2"
     id("io.github.revxrsal.bukkitkobjects") version "0.0.5"
     id("xyz.jpenilla.gremlin-gradle") version "0.0.7"
-    id("co.uzzu.dotenv.gradle") version "2.0.0"
+    id("co.uzzu.dotenv.gradle") version "2.1.0"
     java
 }
 
