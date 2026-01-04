@@ -20,8 +20,8 @@ class ChatInputHandler<T>(
     override fun handle(
         player: Player,
         current: T,
+        clickType: ClickType,
         update: (T?) -> Unit,
-        clickType: ClickType
     ) {
         player.closeInventory()
         player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(prompt))
@@ -53,6 +53,10 @@ class ChatInputHandler<T>(
             else Optional.of(MiniMessage.miniMessage().deserialize(str))
         }
 
-        fun forInteger(prompt: String) = ChatInputHandler(prompt) { it.toIntOrNull() }
+        fun forInteger(prompt: String, min: Int = Int.MIN_VALUE, max: Int = Int.MAX_VALUE) =
+            ChatInputHandler(prompt) {
+                val i = it.toIntOrNull()
+                i?.coerceIn(min, max)
+            }
     }
 }
