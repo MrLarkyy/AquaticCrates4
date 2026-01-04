@@ -53,7 +53,7 @@ interface ValueSerializer<T> {
         }
     }
 
-    class ListSection<T : Configurable>(
+    class ListSection<T : Configurable<T>>(
         private val factory: () -> T
     ) : ValueSerializer<MutableList<T>> {
         override fun serialize(section: ConfigurationSection, path: String, value: MutableList<T>) {

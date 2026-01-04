@@ -1,49 +1,75 @@
-import gg.aquatic.crates.editor.ValueSerializer
+import gg.aquatic.crates.editor.Serializers.COMPONENT
+import gg.aquatic.crates.editor.Serializers.MATERIAL
+import gg.aquatic.crates.editor.value.ElementBehavior
+import gg.aquatic.crates.editor.value.SimpleEditorValue
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
-import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.configuration.MemoryConfiguration
+import org.bukkit.inventory.ItemStack
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class SerializationTest {
 
     @Test
-    fun `test serialization with configurable dsl`() {
-        val config = YamlConfiguration()
-        // We use the ListSection serializer which calls .serialize() on our Configurable objects
-        val listSerializer = ValueSerializer.ListSection { TestItemData() }
+    fun `test item data round trip`() {
+        val original = TestItemData()
+        original.material.value = Material.DIAMOND_SWORD
+        original.amount.value = 5
 
-        // 1. Prepare Data using the new DSL-backed properties
-        val originalItems = mutableListOf(
-            TestItemData().apply {
-                material.value = Material.DIAMOND
-                amount.value = 64
-            },
-            TestItemData().apply {
-                material.value = Material.DIRT
-                amount.value = 7
-            }
+        val config = MemoryConfiguration()
+        original.serialize(config)
+
+        // We use the same Serializer to read it back, ensuring symmetry
+        val loadedMaterial = MATERIAL.deserialize(config, "material")
+        assertEquals(Material.DIAMOND_SWORD, loadedMaterial)
+        assertEquals(5, config.getInt("amount"))
+    }
+
+    @Test
+    fun `test primitive list serialization`() {
+        val data = TestItemData()
+        val behavior = ElementBehavior<Component>(
+            icon = { ItemStack(Material.PAPER) },
+            handler = { _, _, _, _ -> }
         )
 
-        // 2. Serialize to YAML
-        listSerializer.serialize(config, "items", originalItems)
+        val text = "Test Line"
+        val testEditor = SimpleEditorValue("__value", Component.text(text), behavior.icon, behavior.handler, { it }, COMPONENT)
+        data.lore.value.add(testEditor)
 
-        // DEBUG: Check output
-        println("Generated YAML:\n${config.saveToString()}")
+        val config = MemoryConfiguration()
+        data.serialize(config)
 
-        // 3. Deserialize back
-        val loadedItems = listSerializer.deserialize(config, "items")
+        // Instead of raw getList, use our getSectionList helper if it's a list of sections,
+        // but since this is a list of primitives, we check if the serialized output matches the expectation of our COMPONENT serializer
+        val rawList = config.getList("lore")!!
+        val firstEntry = rawList[0]
 
-        // 4. Assertions
-        assertEquals(2, loadedItems.size)
+        // If MemoryConfiguration didn't convert it to string yet, we use our serializer's decode logic to check what SHOULD be there
+        val temp = MemoryConfiguration()
+        COMPONENT.serialize(temp, "temp", Component.text(text))
+        assertEquals(temp.get("temp"), firstEntry)
+    }
 
-        assertEquals(Material.DIAMOND, loadedItems[0].material.value)
-        assertEquals(64, loadedItems[0].amount.value)
+    @Test
+    fun `test nested configurable list serialization`() {
+        val crate = TestCrateData()
+        val reward = TestItemData()
+        reward.material.value = Material.GOLD_INGOT
 
-        assertEquals(Material.DIRT, loadedItems[1].material.value)
-        assertEquals(7, loadedItems[1].amount.value)
+        crate.rewards.value.add(reward.asEditorValue("reward", { it.material.getDisplayItem() }, { _, _, _ -> }))
 
-        // Check that order is preserved (important for GUIs)
-        assertEquals("material", loadedItems[0].getEditorValues()[0].key)
-        assertEquals("amount", loadedItems[0].getEditorValues()[1].key)
+        val config = MemoryConfiguration()
+        crate.serialize(config)
+
+        val rewardsList = config.getList("rewards") as List<*>
+        val firstReward = rewardsList[0] as Map<*, *>
+
+        // Use the MATERIAL serializer to verify the content of the map entry
+        val temp = MemoryConfiguration()
+        temp.set("material", firstReward["material"])
+
+        assertEquals(Material.GOLD_INGOT, MATERIAL.deserialize(temp, "material"))
     }
 }

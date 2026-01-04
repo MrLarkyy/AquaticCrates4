@@ -3,11 +3,12 @@ import gg.aquatic.crates.editor.Serializers.COMPONENT
 import gg.aquatic.crates.editor.Serializers.INT
 import gg.aquatic.crates.editor.Serializers.MATERIAL
 import gg.aquatic.crates.editor.handlers.ChatInputHandler
+import gg.aquatic.crates.editor.value.ElementBehavior
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
-class TestItemData : Configurable() {
+class TestItemData : Configurable<TestItemData>() {
 
     val material = edit("material", Material.STONE, MATERIAL,
         icon = { mat -> ItemStack(mat).apply { editMeta { it.displayName(Component.text("§eMaterial: ${mat.name}")) } } },
@@ -19,11 +20,22 @@ class TestItemData : Configurable() {
         handler = ChatInputHandler.forInteger("Enter Amount:")
     )
 
-    // A list of complex objects (Lore)
+    // A list of simple objects (Lore) using the new behavior pattern
     val lore = editList("lore", emptyList(), COMPONENT,
-        elementIcon = { line -> ItemStack(Material.PAPER).apply { editMeta { it.displayName(line) } } },
-        elementHandler = ChatInputHandler.forComponent("Enter line:"),
+        behavior = ElementBehavior(
+            icon = { line -> ItemStack(Material.PAPER).apply { editMeta { it.displayName(line) } } },
+            handler = ChatInputHandler.forComponent("Enter line:")
+        ),
+        onAdd = { Component.empty() },
         listIcon = { list -> ItemStack(Material.BOOK).apply { editMeta { it.displayName(Component.text("§6Edit Lore (${list.size} lines)")) } } },
-        openGui = { player, editor, update -> /* Open Generic List GUI */ }
+        guiHandler = { player, editor, update -> /* Open Generic List GUI */ }
     )
+
+    override fun copy(): TestItemData {
+        return TestItemData().also { copy ->
+            copy.material.value = this.material.value
+            copy.amount.value = this.amount.value
+            copy.lore.value = this.lore.value.map { it.clone() }.toMutableList()
+        }
+    }
 }
