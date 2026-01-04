@@ -34,7 +34,7 @@ dependencies {
 
     implementation("org.reflections:reflections:0.10.2")
     implementation("net.kyori:adventure-text-minimessage:4.25.0")
-    implementation("net.kyori:adventure-text-serializer-gson:4.25.0")
+    implementation("net.kyori:adventure-text-serializer-gson:4.26.1")
     implementation("net.kyori:adventure-text-serializer-plain:4.26.1")
 
     testImplementation(kotlin("test"))
