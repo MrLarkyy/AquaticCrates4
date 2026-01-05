@@ -5,6 +5,7 @@ plugins {
     id("xyz.jpenilla.gremlin-gradle") version "0.0.9"
     id("co.uzzu.dotenv.gradle") version "4.0.0"
     java
+    id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
 bukkitKObjects {
@@ -13,6 +14,20 @@ bukkitKObjects {
 
 group = "gg.aquatic.klocale"
 version = "4.0.0"
+
+tasks {
+    runServer {
+        minecraftVersion("1.21.11")
+    }
+}
+
+tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
+    javaLauncher = javaToolchains.launcherFor {
+        vendor = JvmVendorSpec.JETBRAINS
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    jvmArgs("-XX:+AllowEnhancedClassRedefinition")
+}
 
 repositories {
     mavenCentral()
