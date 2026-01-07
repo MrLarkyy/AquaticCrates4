@@ -5,7 +5,9 @@ import gg.aquatic.crates.input.InputHandler
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import org.bukkit.plugin.java.JavaPlugin
 
-object CratesPlugin: JavaPlugin() {
+object CratesPlugin : JavaPlugin() {
+
+    val commandDispatcher: CommandDispatcher<CommandSourceStack> by lazy { commandDispatcher() }
 
     override fun onLoad() {
 
@@ -19,10 +21,9 @@ object CratesPlugin: JavaPlugin() {
         InputHandler.disable()
     }
 
-    val commandDispatcher: CommandDispatcher<CommandSourceStack> = getCommandDispatcher()
 
     @Suppress("UNCHECKED_CAST")
-    private fun getCommandDispatcher(): CommandDispatcher<CommandSourceStack> {
+    private fun commandDispatcher(): CommandDispatcher<CommandSourceStack> {
         val getServer = server.javaClass.getDeclaredMethod("getServer")
         getServer.isAccessible = true
 
