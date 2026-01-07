@@ -22,6 +22,7 @@ object CratesPlugin : JavaPlugin() {
     }
 
 
+    @JvmName("_getCommandDispatcher")
     @Suppress("UNCHECKED_CAST")
     private fun commandDispatcher(): CommandDispatcher<CommandSourceStack> {
         val getServer = server.javaClass.getDeclaredMethod("getServer")
