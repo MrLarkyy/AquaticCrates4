@@ -57,7 +57,7 @@ dependencies {
     implementation("net.kyori:adventure-text-serializer-gson:4.26.1")
     implementation("net.kyori:adventure-text-serializer-plain:4.26.1")
 
-    compileOnly("com.mojang:brigadier:1.0.18")
+    compileOnly("com.mojang:brigadier:1.0.500")
 
     testImplementation(kotlin("test"))
     testImplementation("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
