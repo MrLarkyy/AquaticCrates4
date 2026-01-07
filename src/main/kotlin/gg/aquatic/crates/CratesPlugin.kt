@@ -1,13 +1,12 @@
 package gg.aquatic.crates
 
+import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
-import com.mojang.brigadier.arguments.IntegerArgumentType.integer
+import com.mojang.brigadier.arguments.FloatArgumentType
 import gg.aquatic.crates.input.InputHandler
 import io.papermc.paper.command.brigadier.CommandSourceStack
-import io.papermc.paper.command.brigadier.Commands.argument
+import io.papermc.paper.command.brigadier.Commands
 import io.papermc.paper.command.brigadier.Commands.literal
-import net.kyori.adventure.text.minimessage.translation.Argument.argument
 import org.bukkit.plugin.java.JavaPlugin
 
 object CratesPlugin : JavaPlugin() {
@@ -21,13 +20,13 @@ object CratesPlugin : JavaPlugin() {
     override fun onEnable() {
         InputHandler.initialize()
 
+
         commandDispatcher.register(
             literal("example")
                 .then(
-                    argument("bar", integer())
-                        .executes { c ->
-                            val num = getInteger(c, "bar")
-                            1
+                    Commands.argument("speed", FloatArgumentType.floatArg(0f,1f))
+                        .executes { ctx ->
+                            Command.SINGLE_SUCCESS
                         }
                 )
         )
