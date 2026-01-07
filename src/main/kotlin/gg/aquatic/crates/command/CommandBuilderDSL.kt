@@ -308,25 +308,33 @@ class ExecutionContext<S : CommandSourceStack, out T : CommandSender>(
     private val mappers: Map<String, (CommandContext<S>) -> Any?> = emptyMap()
 ) {
     /**
-     * Generic getter. Works for:
-     * 1. Standard Brigadier arguments (requires providing the class)
-     * 2. Custom listArguments (auto-mapped)
+     * Retrieves an argument that is expected to exist.
+     * Throws IllegalStateException if the argument is missing or mapping failed.
+     */
+    inline fun <reified V> get(id: String): V {
+        return getOrNull(id) ?: throw IllegalStateException("Required command argument '$id' is missing or failed to map.")
+    }
+
+    /**
+     * Safely retrieves an argument or returns null if it doesn't exist.
      */
     @Suppress("UNCHECKED_CAST")
-    fun <V> get(id: String): V? {
+    fun <V> getOrNull(id: String): V? {
+        // Check custom mappers (listArgument, flags, etc.)
         val mapper = mappers[id]
         if (mapper != null) {
             return mapper(context) as? V
         }
 
+        // Fallback to raw Brigadier
         return try {
             context.getArgument(id, Any::class.java) as? V
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
 
-    fun getPlayer(id: String): Player? {
+    fun player(id: String): Player? {
         return try {
             context.getArgument(id, PlayerSelectorArgumentResolver::class.java)
                 .resolve(context.source)
@@ -340,34 +348,34 @@ class ExecutionContext<S : CommandSourceStack, out T : CommandSender>(
      * Retrieves a named argument value (e.g., -amount:5)
      */
     @Suppress("UNCHECKED_CAST")
-    fun <V> getNamed(id: String, key: String): V? {
-        val map = get<Map<String, Any>>(id) ?: return null
+    fun <V> named(id: String, key: String): V? {
+        val map = getOrNull<Map<String, Any>>(id) ?: return null
         return map[key] as? V
     }
 
-    fun <V> getNamed(id: String, key: String, default: V): V {
-        return getNamed(id, key) ?: default
+    fun <V> named(id: String, key: String, default: V): V {
+        return named(id, key) ?: default
     }
 
     /**
      * Retrieves the set of flags found in the command
      */
-    fun getFlags(id: String): Set<String> {
-        return get<Set<String>>(id) ?: emptySet()
+    fun flags(id: String): Set<String> {
+        return getOrNull<Set<String>>(id) ?: emptySet()
     }
 
     /**
      * Shorthand to check if a specific flag was present
      */
     fun hasFlag(id: String, flag: String): Boolean {
-        return getFlags(id).contains(flag)
+        return flags(id).contains(flag)
     }
 
-    fun getInt(id: String): Int = IntegerArgumentType.getInteger(context, id)
-    fun getDouble(id: String): Double = DoubleArgumentType.getDouble(context, id)
-    fun getBoolean(id: String): Boolean = BoolArgumentType.getBool(context, id)
+    fun int(id: String): Int = IntegerArgumentType.getInteger(context, id)
+    fun double(id: String): Double = DoubleArgumentType.getDouble(context, id)
+    fun boolean(id: String): Boolean = BoolArgumentType.getBool(context, id)
 
-    fun getString(id: String): String = StringArgumentType.getString(context, id)
+    fun string(id: String): String = StringArgumentType.getString(context, id)
 }
 
 fun command(

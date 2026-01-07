@@ -44,13 +44,24 @@ class BrigadierDSLTest {
         // 1. Test successful mapping
         dispatcher.execute("crate legendary", mockSource)
         assertNotNull(capturedCrate, "Crate should have been mapped")
-        assertEquals("legendary", capturedCrate?.id)
-        assertEquals(0.05, capturedCrate?.chance)
+        // REMOVED SAFE CALLS (?.) because get<Crate> is now non-null
+        assertEquals("legendary", capturedCrate.id)
+        assertEquals(0.05, capturedCrate.chance)
 
-        // 2. Test invalid input (should return null)
+        // 2. Test invalid input (must use getOrNull in the execute block to avoid Exception)
         capturedCrate = null
-        dispatcher.execute("crate invalid", mockSource)
-        assertEquals(null, capturedCrate, "Invalid input should map to null")
+
+        // We redefine the command for the 'invalid' test if we want to test getOrNull specifically
+        dispatcher.command("crate_null") {
+            listArgument("type", values = { crates }, mapper = { it.id }) {
+                execute<Player> {
+                    capturedCrate = getOrNull<Crate>("type")
+                    true
+                }
+            }
+        }
+        dispatcher.execute("crate_null invalid", mockSource)
+        assertEquals(null, capturedCrate, "Invalid input should map to null via getOrNull")
     }
 
     @Test
@@ -124,7 +135,7 @@ class BrigadierDSLTest {
         dispatcher.command("testflags") {
             flagsArgument("options", listOf("-s", "--silent", "-f")) {
                 execute<Player> {
-                    capturedFlags = getFlags("options")
+                    capturedFlags = flags("options")
                     true
                 }
             }
@@ -156,7 +167,7 @@ class BrigadierDSLTest {
                 "radius" to IntegerArgumentType.integer(0)
             )) {
                 execute<Player> {
-                    capturedAmount = getNamed("params", "amount")
+                    capturedAmount = named("params", "amount")
                     true
                 }
             }
