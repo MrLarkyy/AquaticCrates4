@@ -50,7 +50,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     implementation(project(":api"))
     implementation("gg.aquatic:KRegistry:25.0.1")
-    implementation("gg.aquatic:Kommand:26.0.1")
+    implementation("gg.aquatic:Kommand:26.0.2")
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     implementation("org.reflections:reflections:0.10.2")
