@@ -3,8 +3,7 @@ name: Build & Release Paper Plugin
 on:
   push:
     tags:
-      - 'v*'     # v1.0.0, v1.2.3, etc.
-  workflow_dispatch:
+      - 'v*'
 
 permissions:
   contents: write
@@ -14,24 +13,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
-      - name: Set up Java 21
-        uses: actions/setup-java@v5
+      - uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '21'
           cache: gradle
 
-      - name: Grant execute permission for Gradle
-        run: chmod +x gradlew
+      - run: chmod +x gradlew
+      - run: ./gradlew shadowJar
 
-      - name: Build shaded JAR
-        run: ./gradlew shadowJar
-
-      - name: Publish to GitHub Releases
-        uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
