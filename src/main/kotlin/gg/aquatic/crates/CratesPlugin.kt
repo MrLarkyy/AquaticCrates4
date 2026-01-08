@@ -16,7 +16,7 @@ object CratesPlugin : JavaPlugin() {
         command("test") {
             "test" {
                 execute<Player> {
-                    sender.sendMessage("Test command executed!")
+                    sender.sendMessage("Test command executed! - Another change")
                     true
                 }
             }
