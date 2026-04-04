@@ -61,7 +61,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     implementation(project(":api"))
-    compileOnly("gg.aquatic:Waves:26.0.49-SNAPSHOT")
+    compileOnly("gg.aquatic:Waves:26.0.50")
     compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.2-beta-r3-b")
     compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.9")
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
