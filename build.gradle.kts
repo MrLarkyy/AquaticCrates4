@@ -77,7 +77,7 @@ dependencies {
     compileOnly("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     compileOnly("com.zaxxer:HikariCP:7.0.2")
     compileOnly("org.mariadb.jdbc:mariadb-java-client:3.5.8")
-    compileOnly("org.xerial:sqlite-jdbc:3.51.3.0")
+    compileOnly("org.xerial:sqlite-jdbc:3.53.0.0")
 
     implementation("org.reflections:reflections:0.10.2")
 
@@ -94,7 +94,7 @@ dependencies {
     testImplementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     testImplementation("com.zaxxer:HikariCP:7.0.2")
     testImplementation("org.mariadb.jdbc:mariadb-java-client:3.5.8")
-    testImplementation("org.xerial:sqlite-jdbc:3.51.3.0")
+    testImplementation("org.xerial:sqlite-jdbc:3.53.0.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
 
