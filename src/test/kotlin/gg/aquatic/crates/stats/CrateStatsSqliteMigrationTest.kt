@@ -6,8 +6,10 @@ import java.util.UUID
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
+@Tag("integration")
 class CrateStatsSqliteMigrationTest {
     private val tempDbFile = Files.createTempFile("aqcrates-stats-migration-", ".db").toFile().apply {
         deleteOnExit()

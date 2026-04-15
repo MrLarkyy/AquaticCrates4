@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "2.3.20"
     kotlin("plugin.serialization") version "2.3.20"
     id("com.gradleup.shadow") version "9.4.1"
-    id("io.github.revxrsal.bukkitkobjects") version "0.0.5"
+    id("io.github.revxrsal.bukkitkobjects") version "0.1.1"
     id("co.uzzu.dotenv.gradle") version "4.0.0"
     java
     id("xyz.jpenilla.run-paper") version "3.0.2"
@@ -14,6 +14,8 @@ bukkitKObjects {
 
 group = "gg.aquatic.aquaticcrates"
 version = "4.0.0"
+
+val targetJavaVersion = 25
 
 tasks {
     runServer {
@@ -35,7 +37,7 @@ tasks {
 tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
     javaLauncher = javaToolchains.launcherFor {
         vendor = JvmVendorSpec.JETBRAINS
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
     jvmArgs("-XX:+AllowEnhancedClassRedefinition")
 }
@@ -101,11 +103,44 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(targetJavaVersion)
 }
 
 tasks.test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags("benchmark", "integration")
+    }
+    testLogging {
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+}
+
+val integrationTest by tasks.registering(Test::class) {
+    description = "Runs integration tests."
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    testClassesDirs = sourceSets.test.get().output.classesDirs
+    classpath = sourceSets.test.get().runtimeClasspath
+    shouldRunAfter(tasks.test)
+    useJUnitPlatform {
+        includeTags("integration")
+    }
+    testLogging {
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+}
+
+val benchmarkTest by tasks.registering(Test::class) {
+    description = "Runs benchmark-style tests."
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    testClassesDirs = sourceSets.test.get().output.classesDirs
+    classpath = sourceSets.test.get().runtimeClasspath
+    shouldRunAfter(tasks.test, integrationTest)
+    useJUnitPlatform {
+        includeTags("benchmark")
+    }
+    testLogging {
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
 }
 
 subprojects {
@@ -113,7 +148,7 @@ subprojects {
 
     version = rootProject.version
     kotlin {
-        jvmToolchain(21)
+        jvmToolchain(targetJavaVersion)
     }
 }
 

@@ -30,10 +30,12 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import net.kyori.adventure.text.Component
+import org.junit.jupiter.api.Tag
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
+@Tag("benchmark")
 class MassOpeningBenchmarkTest {
     @AfterTest
     fun tearDownStats() {

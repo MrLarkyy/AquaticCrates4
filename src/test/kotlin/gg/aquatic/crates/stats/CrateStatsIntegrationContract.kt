@@ -13,8 +13,10 @@ import org.jetbrains.exposed.v1.jdbc.insert
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
+@Tag("integration")
 abstract class CrateStatsIntegrationContract {
     protected abstract fun createDatabase(): CrateStatsDatabase
 
