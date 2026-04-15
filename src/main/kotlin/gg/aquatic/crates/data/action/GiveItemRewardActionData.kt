@@ -2,6 +2,7 @@ package gg.aquatic.crates.data.action
 
 import gg.aquatic.common.argument.ObjectArguments
 import gg.aquatic.crates.data.item.StackedItemData
+import gg.aquatic.crates.data.item.StackedItemDataEditor
 import gg.aquatic.execute.ActionHandle
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
 import gg.aquatic.waves.util.action.GiveItemAction
@@ -22,7 +23,7 @@ data class GiveItemRewardActionData(
     companion object {
         fun TypedNestedSchemaBuilder<GiveItemRewardActionData>.defineEditor() {
             group(GiveItemRewardActionData::item) {
-                with(StackedItemData) {
+                with(StackedItemDataEditor) {
                     defineBasicEditor(
                         materialLabel = "Reward Material",
                         nameLabel = "Reward Item Name",

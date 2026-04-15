@@ -1,8 +1,8 @@
 package gg.aquatic.crates.message
 
 import gg.aquatic.crates.message.condition.MessageConditionData
-import gg.aquatic.crates.message.condition.MessageConditionSelectionMenu
-import gg.aquatic.crates.message.condition.defineMessageConditionEditor
+import gg.aquatic.crates.message.condition.editor.MessageConditionSelectionMenu
+import gg.aquatic.crates.message.condition.editor.defineMessageConditionEditor
 import gg.aquatic.waves.serialization.editor.meta.EditorEntryFactories
 import gg.aquatic.waves.serialization.editor.meta.TextFieldAdapter
 import gg.aquatic.waves.serialization.editor.meta.TextFieldConfig
@@ -66,3 +66,4 @@ data class MessageComponentData(
         }
     }
 }
+

@@ -1,17 +1,17 @@
 package gg.aquatic.crates.data
 
-import gg.aquatic.crates.data.editor.CrateEditorValidators
+import gg.aquatic.crates.data.validation.CrateDataValidators
 import gg.aquatic.crates.data.editor.PreviewSectionFieldAdapter
-import gg.aquatic.crates.data.editor.encodeToNode
-import gg.aquatic.crates.data.editor.switchingSection
-import gg.aquatic.crates.data.hologram.HologramSettingsSectionFieldAdapter
-import gg.aquatic.crates.data.interaction.InteractionSettingsSectionFieldAdapter
+import gg.aquatic.crates.data.editor.core.encodeToNode
+import gg.aquatic.crates.data.hologram.editor.HologramSettingsSectionFieldAdapter
+import gg.aquatic.crates.data.interaction.editor.InteractionSettingsSectionFieldAdapter
 import gg.aquatic.crates.data.key.KeySettingsSectionFieldAdapter
 import gg.aquatic.crates.data.milestone.MilestoneSettingsSectionFieldAdapter
 import gg.aquatic.crates.data.processor.BasicRewardProcessorData
 import gg.aquatic.crates.data.processor.ChooseRewardProcessorData
-import gg.aquatic.crates.data.processor.RewardProcessorSectionFieldAdapter
+import gg.aquatic.crates.data.processor.editor.RewardProcessorSectionFieldAdapter
 import gg.aquatic.crates.data.processor.RewardProcessorType
+import gg.aquatic.crates.data.processor.WorldChooseRewardProcessorData
 import gg.aquatic.crates.data.provider.ConditionalPoolsRewardProviderData
 import gg.aquatic.crates.data.provider.RewardProviderSectionFieldAdapter
 import gg.aquatic.crates.data.provider.RewardProviderType
@@ -23,8 +23,6 @@ import gg.aquatic.waves.serialization.editor.meta.TypedEditorSchemaBuilder
 import org.bukkit.Material
 
 internal fun TypedEditorSchemaBuilder<CrateData>.defineCrateDataRootSchema() {
-    field(CrateData::rewardProviderType, visibleWhen = { false })
-    field(CrateData::rewardProcessorType, visibleWhen = { false })
     field(
         CrateData::displayName,
         TextFieldAdapter,
@@ -62,7 +60,7 @@ internal fun TypedEditorSchemaBuilder<CrateData>.defineCrateDataRootSchema() {
         mapKeyPrompt = "Enter rarity ID:",
         newMapEntryFactory = EditorEntryFactories.map(
             keyPrompt = "Enter rarity ID:",
-            keyValidator = { if (CrateEditorValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
+            keyValidator = { if (CrateDataValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
             valueFactory = { rarityId ->
                 CrateDataFormats.yaml.encodeToNode(
                     RewardRarityData.serializer(),
@@ -73,8 +71,8 @@ internal fun TypedEditorSchemaBuilder<CrateData>.defineCrateDataRootSchema() {
     ) {
         with(RewardRarityData) { defineEditor() }
     }
-    switchingSection(
-        CrateData::simpleProvider,
+    field(
+        CrateData::rewardProvider,
         adapter = RewardProviderSectionFieldAdapter,
         displayName = "Rewards",
         searchTags = listOf("rewards", "provider", "reward provider", "simple provider", "reward pool"),
@@ -83,28 +81,18 @@ internal fun TypedEditorSchemaBuilder<CrateData>.defineCrateDataRootSchema() {
             "Active reward provider for this crate.",
             "Left click to edit its settings.",
             "Right click to change the reward provider type."
-        ),
-        visibleWhen = { it.isRewardProviderType(RewardProviderType.SIMPLE) }
-    ) {
-        with(SimpleRewardProviderData) { defineEditor() }
+        )
+    )
+    group(CrateData::rewardProvider) {
+        include<SimpleRewardProviderData> {
+            with(SimpleRewardProviderData) { defineEditor() }
+        }
+        include<ConditionalPoolsRewardProviderData> {
+            with(ConditionalPoolsRewardProviderData) { defineEditor() }
+        }
     }
-    switchingSection(
-        CrateData::conditionalPoolsProvider,
-        adapter = RewardProviderSectionFieldAdapter,
-        displayName = "Rewards",
-        searchTags = listOf("rewards", "provider", "reward provider", "conditional pools", "pools", "reward pool"),
-        iconMaterial = Material.CHEST_MINECART,
-        description = listOf(
-            "Active reward provider for this crate.",
-            "Left click to edit its settings.",
-            "Right click to change the reward provider type."
-        ),
-        visibleWhen = { it.isRewardProviderType(RewardProviderType.CONDITIONAL_POOLS) }
-    ) {
-        with(ConditionalPoolsRewardProviderData) { defineEditor() }
-    }
-    switchingSection(
-        CrateData::basicProcessor,
+    field(
+        CrateData::rewardProcessor,
         adapter = RewardProcessorSectionFieldAdapter,
         displayName = "Reward Processor",
         searchTags = listOf("processor", "reward processor", "basic processor", "result menu", "reward display"),
@@ -113,25 +101,18 @@ internal fun TypedEditorSchemaBuilder<CrateData>.defineCrateDataRootSchema() {
             "Controls what happens after rewards are rolled.",
             "Left click to edit its settings.",
             "Right click to change the processor type."
-        ),
-        visibleWhen = { it.isRewardProcessorType(RewardProcessorType.BASIC) }
-    ) {
-        with(BasicRewardProcessorData) { defineEditor() }
-    }
-    switchingSection(
-        CrateData::chooseProcessor,
-        adapter = RewardProcessorSectionFieldAdapter,
-        displayName = "Reward Processor",
-        searchTags = listOf("processor", "reward processor", "choose", "choice", "choose menu", "selection menu"),
-        iconMaterial = Material.HOPPER_MINECART,
-        description = listOf(
-            "Controls what happens after rewards are rolled.",
-            "Left click to edit its settings.",
-            "Right click to change the processor type."
-        ),
-        visibleWhen = { it.isRewardProcessorType(RewardProcessorType.CHOOSE) }
-    ) {
-        with(ChooseRewardProcessorData) { defineEditor() }
+        )
+    )
+    group(CrateData::rewardProcessor) {
+        include<BasicRewardProcessorData> {
+            with(BasicRewardProcessorData) { defineEditor() }
+        }
+        include<ChooseRewardProcessorData> {
+            with(ChooseRewardProcessorData) { defineEditor() }
+        }
+        include<WorldChooseRewardProcessorData> {
+            with(WorldChooseRewardProcessorData) { defineEditor() }
+        }
     }
     field(
         CrateData::milestones,
@@ -185,3 +166,4 @@ internal fun TypedEditorSchemaBuilder<CrateData>.defineCrateDataRootSchema() {
         definePreviewMenuEditor()
     }
 }
+

@@ -5,6 +5,7 @@ import gg.aquatic.common.coroutine.VirtualsCtx
 import gg.aquatic.crates.await.awaitStartupDependencies
 import gg.aquatic.crates.command.initializeCommands
 import gg.aquatic.crates.crate.CrateHandler
+import gg.aquatic.crates.crate.opening.worldchoose.WorldChooseRuntime
 import gg.aquatic.crates.data.CrateStorage
 import gg.aquatic.crates.debug.CratesLogger
 import gg.aquatic.crates.interact.DestroyCrateClickAction
@@ -12,7 +13,7 @@ import gg.aquatic.crates.interact.OpenCrateClickAction
 import gg.aquatic.crates.interact.PreviewCrateClickAction
 import gg.aquatic.execute.Action
 import gg.aquatic.crates.stats.CrateStats
-import gg.aquatic.crates.stats.CrateStatsPlaceholders
+import gg.aquatic.crates.stats.placeholder.CrateStatsPlaceholders
 import gg.aquatic.kregistry.bootstrap.RegistryHolder
 import gg.aquatic.kurrency.Currency
 import gg.aquatic.kurrency.impl.VirtualCurrency
@@ -70,6 +71,7 @@ object CratesPlugin : JavaPlugin(), RegistryHolder {
         configurePluginState()
         CratesLogger.info("Crate stats configured=${CrateStats.configured}, ready=${CrateStats.ready}")
         CrateStatsPlaceholders.register()
+        WorldChooseRuntime.initialize()
 
         initializeCommands()
 

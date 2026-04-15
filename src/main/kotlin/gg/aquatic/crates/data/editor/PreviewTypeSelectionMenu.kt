@@ -2,6 +2,7 @@ package gg.aquatic.crates.data.editor
 
 import gg.aquatic.crates.data.PREVIEW_TYPE_AUTOMATIC
 import gg.aquatic.crates.data.PREVIEW_TYPE_CUSTOM_PAGES
+import gg.aquatic.crates.data.editor.polymorphic.PolymorphicSelectionMenu
 import gg.aquatic.kmenu.inventory.InventoryType
 import org.bukkit.Material
 

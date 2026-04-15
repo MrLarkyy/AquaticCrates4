@@ -1,9 +1,9 @@
 package gg.aquatic.crates.data.condition
 
 import com.charleskorn.kaml.YamlNode
-import gg.aquatic.crates.data.editor.PolymorphicTypeDefinition
-import gg.aquatic.crates.data.editor.PolymorphicTypeRegistry
-import gg.aquatic.crates.data.editor.createPolymorphicYaml
+import gg.aquatic.crates.data.editor.polymorphic.PolymorphicTypeDefinition
+import gg.aquatic.crates.data.editor.polymorphic.PolymorphicTypeRegistry
+import gg.aquatic.crates.data.editor.polymorphic.createPolymorphicYaml
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.modules.SerializersModule

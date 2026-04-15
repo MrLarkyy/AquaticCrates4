@@ -3,10 +3,10 @@ package gg.aquatic.crates.data.key
 import com.charleskorn.kaml.YamlNode
 import gg.aquatic.crates.data.CrateData
 import gg.aquatic.crates.data.CrateDataFormats
-import gg.aquatic.crates.data.editor.encodeToNode
-import gg.aquatic.crates.data.editor.RootSectionFieldAdapter
-import gg.aquatic.crates.data.editor.withMapValue
-import gg.aquatic.crates.data.editor.yamlScalar
+import gg.aquatic.crates.data.editor.core.encodeToNode
+import gg.aquatic.crates.data.editor.core.RootSectionFieldAdapter
+import gg.aquatic.crates.data.editor.core.withMapValue
+import gg.aquatic.crates.data.editor.core.yamlScalar
 import gg.aquatic.crates.data.interaction.CrateClickMappingData
 import gg.aquatic.crates.data.item.StackedItemData
 import gg.aquatic.stacked.stackedItem
@@ -51,7 +51,7 @@ object KeySettingsSectionFieldAdapter : RootSectionFieldAdapter<KeySettingsData>
         return KeySettingsData.from(crateData)
     }
 
-    override fun updateRoot(root: YamlNode, edited: KeySettingsData): YamlNode {
+    override fun updateRoot(context: EditorFieldContext, root: YamlNode, edited: KeySettingsData): YamlNode {
         return root
             .withMapValue("keyItem", CrateDataFormats.yaml.encodeToNode(StackedItemData.serializer(), edited.keyItem))
             .withMapValue("keyMustBeHeld", yamlScalar(edited.keyMustBeHeld))

@@ -6,18 +6,20 @@ import gg.aquatic.crates.data.RewardData
 import gg.aquatic.crates.data.RewardDataEditorSchema
 import gg.aquatic.crates.data.normalized
 import gg.aquatic.crates.data.range.RewardAmountRangeData
-import gg.aquatic.crates.data.editor.CrateEditorValidators
-import gg.aquatic.crates.data.editor.encodeToNode
+import gg.aquatic.crates.data.validation.CrateDataValidators
+import gg.aquatic.crates.data.editor.core.encodeToNode
 import gg.aquatic.waves.serialization.editor.meta.EditorEntryFactories
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bukkit.Material
 
 @Serializable
+@SerialName("simple")
 data class SimpleRewardProviderData(
     val rewardCountRanges: List<RewardAmountRangeData> = emptyList(),
     val rewards: Map<String, RewardData> = emptyMap(),
-) {
+) : RewardProviderData() {
     fun normalized(
         availableRarityIds: Set<String>,
         fallbackRarityId: String,
@@ -63,7 +65,7 @@ data class SimpleRewardProviderData(
                 mapKeyPrompt = "Enter reward ID:",
                 newMapEntryFactory = EditorEntryFactories.map(
                     keyPrompt = "Enter reward ID:",
-                    keyValidator = { if (CrateEditorValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
+                    keyValidator = { if (CrateDataValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
                     valueFactory = { rewardId ->
                         CrateDataFormats.yaml.encodeToNode(
                             RewardData.serializer(),

@@ -1,22 +1,24 @@
 package gg.aquatic.crates.data.provider
 
-import gg.aquatic.crates.data.editor.CrateEditorValidators
-import gg.aquatic.crates.data.editor.encodeToNode
+import gg.aquatic.crates.data.validation.CrateDataValidators
+import gg.aquatic.crates.data.editor.core.encodeToNode
 import gg.aquatic.crates.data.range.RewardAmountRangeData
 import gg.aquatic.waves.serialization.editor.meta.EditorEntryFactories
 import gg.aquatic.waves.serialization.editor.meta.TextFieldAdapter
 import gg.aquatic.waves.serialization.editor.meta.TextFieldConfig
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bukkit.Material
 
 @Serializable
+@SerialName("conditional-pools")
 data class ConditionalPoolsRewardProviderData(
     val poolSelectionMode: String = PoolSelectionMode.FIRST_MATCH.id,
     val fallbackPoolId: String? = null,
     val rewardCountRanges: List<RewardAmountRangeData> = emptyList(),
     val pools: Map<String, RewardPoolData> = emptyMap(),
-) {
+) : RewardProviderData() {
     fun normalized(
         availableRarityIds: Set<String>,
         fallbackRarityId: String,
@@ -95,7 +97,7 @@ data class ConditionalPoolsRewardProviderData(
                 mapKeyPrompt = "Enter pool ID:",
                 newMapEntryFactory = EditorEntryFactories.map(
                     keyPrompt = "Enter pool ID:",
-                    keyValidator = { if (CrateEditorValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
+                    keyValidator = { if (CrateDataValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
                     valueFactory = {
                         gg.aquatic.crates.data.CrateDataFormats.yaml.encodeToNode(
                             RewardPoolData.serializer(),

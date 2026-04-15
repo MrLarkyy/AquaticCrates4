@@ -102,7 +102,7 @@ class Crate(
         val rotation = player.yaw - 180
         val location = originalEvent.clickedBlock!!.location.add(originalEvent.blockFace.direction).apply { yaw = rotation }
 
-        CrateHandler.spawnCrate(location, this, true)
+        CrateHandler.spawnCrate(location, this)
     }
 
     val crateItemStack by lazy { crateItem.getItem() }

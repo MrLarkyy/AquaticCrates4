@@ -1,19 +1,22 @@
 package gg.aquatic.crates.data.processor
 
 import gg.aquatic.crates.data.action.RewardActionData
-import gg.aquatic.crates.data.action.RewardActionSelectionMenu
-import gg.aquatic.crates.data.action.defineRewardActionEditor
+import gg.aquatic.crates.data.action.editor.RewardActionSelectionMenu
+import gg.aquatic.crates.data.action.editor.defineRewardActionEditor
 import gg.aquatic.crates.data.item.StackedItemData
-import gg.aquatic.crates.data.editor.mapValue
-import gg.aquatic.crates.data.editor.stringContentOrNull
+import gg.aquatic.crates.data.item.StackedItemDataEditor
+import gg.aquatic.crates.data.editor.core.mapValue
+import gg.aquatic.crates.data.editor.core.stringContentOrNull
 import gg.aquatic.crates.data.range.RewardAmountRangeData
 import gg.aquatic.waves.serialization.editor.meta.EditorFieldContext
 import kotlinx.serialization.Polymorphic
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bukkit.Material
 
 @Serializable
+@SerialName("choose")
 data class ChooseRewardProcessorData(
     val chooseCountRanges: List<RewardAmountRangeData> = listOf(RewardAmountRangeData(min = 1, max = 1)),
     val uniqueRewards: Boolean = true,
@@ -24,7 +27,7 @@ data class ChooseRewardProcessorData(
         displayName = "<gray>Hidden Reward"
     ),
     val menu: RewardDisplayMenuData = RewardDisplayMenuData(title = "<yellow>Choose Rewards"),
-) {
+) : RewardProcessorData() {
     fun normalized(): ChooseRewardProcessorData {
         return copy(
             chooseCountRanges = chooseCountRanges.map { it.normalized() }
@@ -86,7 +89,7 @@ data class ChooseRewardProcessorData(
             }
             include<ChooseRewardProcessorData>(visibleWhen = { it.currentBoolean("hiddenRewards") == true }) {
                 group(ChooseRewardProcessorData::hiddenItem) {
-                    with(StackedItemData) {
+                    with(StackedItemDataEditor) {
                         defineBasicEditor(
                             materialLabel = "Hidden Material",
                             nameLabel = "Hidden Name",
@@ -112,9 +115,11 @@ private fun EditorFieldContext.currentBoolean(key: String): Boolean? {
         return current.toBooleanStrictOrNull()
     }
 
-    val rootValue = root.mapValue("chooseProcessor")
+    val rootValue = root
+        .mapValue("rewardProcessor")
         ?.mapValue(key)
         ?.stringContentOrNull
 
     return rootValue?.toBooleanStrictOrNull()
 }
+

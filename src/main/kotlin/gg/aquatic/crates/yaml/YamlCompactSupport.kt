@@ -6,7 +6,7 @@ import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlNode
 import com.charleskorn.kaml.YamlNull
 import com.charleskorn.kaml.YamlScalar
-import gg.aquatic.crates.data.editor.encodeToNode
+import gg.aquatic.crates.data.editor.core.encodeToNode
 import kotlinx.serialization.KSerializer
 
 fun <T> Yaml.encodeCompactString(serializer: KSerializer<T>, value: T): String {

@@ -4,9 +4,9 @@ import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.YamlNamingStrategy
-import gg.aquatic.crates.data.editor.PolymorphicTypeDefinition
-import gg.aquatic.crates.data.editor.PolymorphicTypeRegistry
-import gg.aquatic.crates.data.editor.createPolymorphicYaml
+import gg.aquatic.crates.data.editor.polymorphic.PolymorphicTypeDefinition
+import gg.aquatic.crates.data.editor.polymorphic.PolymorphicTypeRegistry
+import gg.aquatic.crates.data.editor.polymorphic.createPolymorphicYaml
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic

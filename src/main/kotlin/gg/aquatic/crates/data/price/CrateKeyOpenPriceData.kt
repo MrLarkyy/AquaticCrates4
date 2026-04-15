@@ -1,6 +1,7 @@
 package gg.aquatic.crates.data.price
 
 import gg.aquatic.crates.crate.CrateHandler
+import gg.aquatic.crates.data.price.editor.CrateReferenceFieldAdapter
 import gg.aquatic.crates.open.OpenPriceHandle
 import gg.aquatic.waves.serialization.editor.meta.IntFieldAdapter
 import gg.aquatic.waves.serialization.editor.meta.IntFieldConfig

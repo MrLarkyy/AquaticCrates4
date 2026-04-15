@@ -17,11 +17,14 @@ import gg.aquatic.klocale.impl.paper.replacePlaceholders
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import kotlinx.coroutines.withContext
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.util.LinkedHashMap
+import java.util.UUID
 
 /**
  * aqcrates key give <crate-id> [player] [key]
@@ -49,6 +52,36 @@ internal fun CommandBuilder<CommandSourceStack, CommandSender>.keyCommand() =
                     val virtual = hasFlag("options", "-v")
                     val target = resolveKeyGiveTarget(sender, playerArgument, silent) ?: return@suspendExecute
                     executeKeyGive(sender, crate, target, amount, virtual, silent)
+                }
+            }
+        }
+
+        "giveall" {
+            crateArgument("crate") {
+                bigIntegerArgument("amount", min = BigInteger.ONE) {
+                    flagsArgument("options", listOf("-s", "-v", "-off"))
+                }
+
+                suspendExecute<CommandSender> {
+                    val crate = get<Crate>("crate")
+                    val amount = getOrNull<BigInteger>("amount") ?: BigInteger.ONE
+                    val silent = hasFlag("options", "-s")
+                    val virtual = hasFlag("options", "-v")
+                    val allowOffline = hasFlag("options", "-off")
+
+                    if (allowOffline && !virtual) {
+                        Messages.KEYS_OFFLINE_REQUIRES_VIRTUAL.message().send(sender)
+                        return@suspendExecute
+                    }
+
+                    executeKeyGiveAll(
+                        sender = sender,
+                        crate = crate,
+                        amount = amount,
+                        virtual = virtual,
+                        allowOffline = allowOffline,
+                        silent = silent,
+                    )
                 }
             }
         }
@@ -155,6 +188,34 @@ private suspend fun executeKeyGive(
     }
 }
 
+private suspend fun executeKeyGiveAll(
+    sender: CommandSender,
+    crate: Crate,
+    amount: BigInteger,
+    virtual: Boolean,
+    allowOffline: Boolean,
+    silent: Boolean,
+) {
+    val targets = resolveKeyGiveAllTargets(allowOffline)
+    for (target in targets) {
+        if (target.onlinePlayer != null) {
+            withContext(BukkitCtx.ofEntity(target.onlinePlayer)) {
+                giveKeysToTarget(crate, target, amount, virtual)
+            }
+        } else {
+            giveKeysToTarget(crate, target, amount, virtual)
+        }
+
+        if (!silent && target.onlinePlayer != null) {
+            sendKeyGiveAllTargetMessage(sender, target.onlinePlayer, crate, amount, virtual)
+        }
+    }
+
+    if (!silent) {
+        sendKeyGiveAllSenderMessage(sender, crate, amount, virtual, targets.size)
+    }
+}
+
 private fun sendKeyGiveMessages(
     sender: CommandSender,
     player: Player,
@@ -180,19 +241,50 @@ private fun sendKeyGiveMessages(
         .send(sender)
 }
 
+private fun sendKeyGiveAllTargetMessage(
+    sender: CommandSender,
+    target: Player,
+    crate: Crate,
+    amount: BigInteger,
+    virtual: Boolean,
+) {
+    val amountString = amount.toString()
+    val keyType = keyTypeName(virtual)
+
+    if (sender == target) {
+        Messages.KEYS_GIVEN_ALL_SELF.message()
+            .replacePlaceholder("%amount%", amountString)
+            .replacePlaceholder("%key_type%", keyType)
+            .replacePlaceholder("%crate_id%", crate.id)
+            .send(target)
+        return
+    }
+
+    Messages.KEYS_GIVEN_ALL_TARGET.message()
+        .replacePlaceholder("%amount%", amountString)
+        .replacePlaceholder("%key_type%", keyType)
+        .replacePlaceholder("%crate_id%", crate.id)
+        .send(target)
+}
+
+private fun sendKeyGiveAllSenderMessage(
+    sender: CommandSender,
+    crate: Crate,
+    amount: BigInteger,
+    virtual: Boolean,
+    playerCount: Int,
+) {
+    Messages.KEYS_GIVEN_ALL_SENDER.message()
+        .replacePlaceholder("%crate_id%", crate.id)
+        .replacePlaceholder("%amount%", amount.toString())
+        .replacePlaceholder("%key_type%", keyTypeName(virtual))
+        .replacePlaceholder("%player_count%", playerCount.toString())
+        .send(sender)
+}
+
 private suspend fun sendKeyBank(sender: CommandSender, target: Player) {
     val data = MessageStorage.loadData()
-    val entries = CrateHandler.crates.values
-        .sortedBy { it.id }
-        .mapNotNull { crate ->
-            val balance = crate.keyVirtualCurrency.getBalance(target)
-            if (balance <= BigDecimal.ZERO) return@mapNotNull null
-            KeyBankEntry(
-                crateId = crate.id,
-                crateName = PlainTextComponentSerializer.plainText().serialize(crate.displayName),
-                amount = balance.stripTrailingZeros().toPlainString()
-            )
-        }
+    val entries = loadKeyBankEntries(target)
 
     if (entries.isEmpty()) {
         Messages.KEY_BANK_EMPTY.message()
@@ -201,27 +293,137 @@ private suspend fun sendKeyBank(sender: CommandSender, target: Player) {
         return
     }
 
-    val renderedLines = entries.flatMap { entry ->
-        data.keyBank.lines.map { line ->
-            line.toMiniMessage().toMMComponent().replacePlaceholders(
-                mapOf(
-                    "player" to target.name,
-                    "crate_id" to entry.crateId,
-                    "crate_name" to entry.crateName,
-                    "amount" to entry.amount,
-                )
-            )
-        }
+    sendRenderedKeyBank(sender, target, data, entries)
+}
+
+private suspend fun loadKeyBankEntries(target: Player): List<KeyBankEntry> {
+    val crates = CrateHandler.crates.values.sortedBy(Crate::id)
+    val entries = ArrayList<KeyBankEntry>(crates.size)
+
+    for (crate in crates) {
+        val entry = createKeyBankEntry(crate, target) ?: continue
+        entries += entry
     }
 
+    return entries
+}
+
+private suspend fun giveKeysToTarget(
+    crate: Crate,
+    target: KeyGiveTarget,
+    amount: BigInteger,
+    virtual: Boolean,
+) {
+    val onlinePlayer = target.onlinePlayer
+    if (onlinePlayer != null) {
+        giveKeys(crate, onlinePlayer, amount, virtual)
+        return
+    }
+
+    crate.keyVirtualCurrency.give(target.uuid, amount.toBigDecimal())
+}
+
+private suspend fun createKeyBankEntry(crate: Crate, target: Player): KeyBankEntry? {
+    val balance = crate.keyVirtualCurrency.getBalance(target)
+    if (balance <= BigDecimal.ZERO) {
+        return null
+    }
+
+    return KeyBankEntry(
+        crateId = crate.id,
+        crateName = PlainTextComponentSerializer.plainText().serialize(crate.displayName),
+        amount = balance.stripTrailingZeros().toPlainString()
+    )
+}
+
+private fun sendRenderedKeyBank(
+    sender: CommandSender,
+    target: Player,
+    data: gg.aquatic.crates.message.MessagesFileData,
+    entries: List<KeyBankEntry>,
+) {
+    val renderedLines = renderKeyBankLines(target, data, entries)
     data.keyBank.toPaperMessage(
         renderedLines,
         paginationReplacements = mapOf("player" to target.name)
     ).send(sender)
 }
 
+private fun renderKeyBankLines(
+    target: Player,
+    data: gg.aquatic.crates.message.MessagesFileData,
+    entries: List<KeyBankEntry>,
+): List<net.kyori.adventure.text.Component> {
+    val renderedLines = ArrayList<net.kyori.adventure.text.Component>(entries.size * data.keyBank.lines.size)
+    for (entry in entries) {
+        renderedLines += renderKeyBankEntryLines(target, data.keyBank, entry)
+    }
+    return renderedLines
+}
+
+private fun renderKeyBankEntryLines(
+    target: Player,
+    message: gg.aquatic.crates.message.EditableMessageData,
+    entry: KeyBankEntry,
+): List<net.kyori.adventure.text.Component> {
+    val placeholders = keyBankPlaceholders(target, entry)
+    return message.lines.map { line ->
+        line.toMiniMessage().toMMComponent().replacePlaceholders(placeholders)
+    }
+}
+
+private fun keyBankPlaceholders(
+    target: Player,
+    entry: KeyBankEntry,
+): Map<String, String> {
+    return mapOf(
+        "player" to target.name,
+        "crate_id" to entry.crateId,
+        "crate_name" to entry.crateName,
+        "amount" to entry.amount,
+    )
+}
+
+private fun resolveKeyGiveAllTargets(allowOffline: Boolean): List<KeyGiveTarget> {
+    val targets = LinkedHashMap<UUID, KeyGiveTarget>()
+    Bukkit.getOnlinePlayers().forEach { player ->
+        targets[player.uniqueId] = KeyGiveTarget(
+            name = player.name,
+            uuid = player.uniqueId,
+            onlinePlayer = player,
+        )
+    }
+
+    if (!allowOffline) {
+        return targets.values.toList()
+    }
+
+    Bukkit.getOfflinePlayers().forEach { offlinePlayer ->
+        if (!offlinePlayer.hasPlayedBefore() && !offlinePlayer.isOnline) {
+            return@forEach
+        }
+        val uuid = offlinePlayer.uniqueId
+        if (targets.containsKey(uuid)) {
+            return@forEach
+        }
+        targets[uuid] = KeyGiveTarget(
+            name = offlinePlayer.name ?: uuid.toString(),
+            uuid = uuid,
+            onlinePlayer = offlinePlayer.player,
+        )
+    }
+
+    return targets.values.toList()
+}
+
 private data class KeyBankEntry(
     val crateId: String,
     val crateName: String,
     val amount: String,
+)
+
+private data class KeyGiveTarget(
+    val name: String,
+    val uuid: UUID,
+    val onlinePlayer: Player?,
 )

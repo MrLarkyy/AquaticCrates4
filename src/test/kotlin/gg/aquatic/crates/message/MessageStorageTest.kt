@@ -1,7 +1,7 @@
 package gg.aquatic.crates.message
 
 import com.charleskorn.kaml.YamlNode
-import gg.aquatic.crates.data.editor.encodeToNode
+import gg.aquatic.crates.data.editor.core.encodeToNode
 import gg.aquatic.crates.message.storage.MessageStorage
 import kotlin.test.Test
 import kotlin.test.assertEquals

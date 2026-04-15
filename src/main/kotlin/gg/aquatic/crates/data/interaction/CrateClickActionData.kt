@@ -102,17 +102,18 @@ data class CommandCrateClickActionData(
 @Serializable
 @SerialName("sound")
 data class SoundCrateClickActionData(
-    val sound: String = "minecraft:entity.player.levelup",
+    @SerialName("sound")
+    val soundKey: String = "minecraft:entity.player.levelup",
     val volume: Double = 1.0,
     val pitch: Double = 1.0,
 ) : CrateClickActionData() {
     override fun toActionHandle(): ActionHandle<CrateClickBinder> =
-        PlayerExecuteActionHandles.clickSound(sound, volume, pitch)
+        PlayerExecuteActionHandles.clickSound(soundKey, volume, pitch)
 
     companion object {
         fun TypedNestedSchemaBuilder<SoundCrateClickActionData>.defineEditor() {
             defineSoundEditor(
-                SoundCrateClickActionData::sound,
+                SoundCrateClickActionData::soundKey,
                 SoundCrateClickActionData::volume,
                 SoundCrateClickActionData::pitch,
             )
@@ -123,14 +124,15 @@ data class SoundCrateClickActionData(
 @Serializable
 @SerialName("stop-sound")
 data class StopSoundCrateClickActionData(
-    val sound: String = "minecraft:entity.player.levelup",
+    @SerialName("sound")
+    val soundKey: String = "minecraft:entity.player.levelup",
 ) : CrateClickActionData() {
-    override fun toActionHandle(): ActionHandle<CrateClickBinder> = PlayerExecuteActionHandles.clickStopSound(sound)
+    override fun toActionHandle(): ActionHandle<CrateClickBinder> = PlayerExecuteActionHandles.clickStopSound(soundKey)
 
     companion object {
         fun TypedNestedSchemaBuilder<StopSoundCrateClickActionData>.defineEditor() {
             defineStopSoundEditor(
-                StopSoundCrateClickActionData::sound,
+                StopSoundCrateClickActionData::soundKey,
             )
         }
     }

@@ -4,6 +4,7 @@ import gg.aquatic.crates.CratesPlugin
 import gg.aquatic.crates.Messages
 import gg.aquatic.crates.command.impl.crateCommand
 import gg.aquatic.crates.command.impl.keyCommand
+import gg.aquatic.crates.command.impl.makeVisibleCommand
 import gg.aquatic.crates.command.impl.messagesCommand
 import gg.aquatic.crates.command.impl.reloadCommand
 import gg.aquatic.crates.command.impl.statsCommand
@@ -26,6 +27,7 @@ internal fun CratesPlugin.initializeCommands() {
 
         crateCommand()
         keyCommand()
+        makeVisibleCommand()
         messagesCommand()
         statsCommand()
         reloadCommand()

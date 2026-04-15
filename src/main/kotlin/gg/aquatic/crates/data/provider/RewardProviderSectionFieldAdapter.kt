@@ -1,12 +1,11 @@
 package gg.aquatic.crates.data.provider
 
-import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlNode
-import gg.aquatic.crates.data.editor.SwitchingSectionFieldAdapter
-import gg.aquatic.crates.data.editor.stringContentOrNull
-import gg.aquatic.crates.data.editor.withMapValue
-import gg.aquatic.crates.data.editor.yamlScalar
-import gg.aquatic.kmenu.inventory.ButtonType
+import gg.aquatic.crates.data.CrateDataFormats
+import gg.aquatic.crates.data.editor.core.SwitchingSectionFieldAdapter
+import gg.aquatic.crates.data.editor.core.encodeToNode
+import gg.aquatic.crates.data.editor.core.mapValue
+import gg.aquatic.crates.data.editor.core.stringContentOrNull
 import gg.aquatic.waves.serialization.editor.meta.EditorFieldContext
 import gg.aquatic.waves.serialization.editor.meta.FieldEditResult
 import org.bukkit.Material
@@ -22,15 +21,20 @@ object RewardProviderSectionFieldAdapter : SwitchingSectionFieldAdapter(
     override suspend fun selectType(player: Player): String? = RewardProviderTypeSelectionMenu.select(player)
 
     override fun updateType(context: EditorFieldContext, selected: String): FieldEditResult {
-        return FieldEditResult.UpdatedRoot(updateRewardProviderType(context.root, selected))
+        return FieldEditResult.Updated(defaultNode(selected))
     }
 
     override fun currentType(context: EditorFieldContext): String {
-        val root = context.root as? YamlMap ?: return RewardProviderType.SIMPLE.id
-        return root.get<YamlNode>("rewardProviderType")?.stringContentOrNull ?: RewardProviderType.SIMPLE.id
+        return context.value
+            .mapValue("type")
+            ?.stringContentOrNull
+            ?: RewardProviderType.SIMPLE.id
     }
 
-    private fun updateRewardProviderType(root: YamlNode, type: String): YamlNode {
-        return root.withMapValue("rewardProviderType", yamlScalar(type))
+    private fun defaultNode(type: String): YamlNode {
+        return CrateDataFormats.yaml.encodeToNode(
+            RewardProviderData.serializer(),
+            RewardProviderType.defaultData(type)
+        )
     }
 }

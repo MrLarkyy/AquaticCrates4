@@ -1,7 +1,7 @@
 package gg.aquatic.crates.data
 
-import gg.aquatic.crates.data.editor.CrateEditorValidators
-import gg.aquatic.crates.data.editor.encodeToNode
+import gg.aquatic.crates.data.validation.CrateDataValidators
+import gg.aquatic.crates.data.editor.core.encodeToNode
 import gg.aquatic.waves.serialization.editor.meta.EditorEntryFactories
 import gg.aquatic.waves.serialization.editor.meta.IntFieldAdapter
 import gg.aquatic.waves.serialization.editor.meta.IntFieldConfig
@@ -57,7 +57,7 @@ data class MilestoneData(
                 mapKeyPrompt = "Enter reward ID:",
                 newMapEntryFactory = EditorEntryFactories.map(
                     keyPrompt = "Enter reward ID:",
-                    keyValidator = { if (CrateEditorValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
+                    keyValidator = { if (CrateDataValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
                     valueFactory = { rewardId ->
                         CrateDataFormats.yaml.encodeToNode(
                             RewardData.serializer(),

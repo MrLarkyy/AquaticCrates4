@@ -10,5 +10,12 @@ enum class RewardProviderType(val id: String) {
         fun of(raw: String): RewardProviderType {
             return entries.firstOrNull { it.id.equals(raw, true) } ?: SIMPLE
         }
+
+        fun defaultData(type: String): RewardProviderData {
+            return when (of(type)) {
+                SIMPLE -> SimpleRewardProviderData()
+                CONDITIONAL_POOLS -> ConditionalPoolsRewardProviderData()
+            }
+        }
     }
 }

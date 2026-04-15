@@ -12,17 +12,18 @@ import org.bukkit.entity.Player
 @Serializable
 @SerialName("sound")
 data class SoundRewardActionData(
-    val sound: String = "minecraft:entity.player.levelup",
+    @SerialName("sound")
+    val soundKey: String = "minecraft:entity.player.levelup",
     val volume: Double = 1.0,
     val pitch: Double = 1.0,
 ) : RewardActionData() {
     override fun toActionHandle(): ActionHandle<Player> =
-        PlayerExecuteActionHandles.rewardSound(sound, volume, pitch)
+        PlayerExecuteActionHandles.rewardSound(soundKey, volume, pitch)
 
     companion object {
         fun TypedNestedSchemaBuilder<SoundRewardActionData>.defineEditor() {
             defineSoundEditor(
-                SoundRewardActionData::sound,
+                SoundRewardActionData::soundKey,
                 SoundRewardActionData::volume,
                 SoundRewardActionData::pitch,
             )

@@ -1,7 +1,6 @@
 package gg.aquatic.crates.data.hologram
 
 import gg.aquatic.kholograms.line.AnimatedHologramLine
-import gg.aquatic.kholograms.line.ItemHologramLine
 import gg.aquatic.kholograms.line.TextHologramLine
 import gg.aquatic.kholograms.serialize.LineSettings
 import gg.aquatic.waves.serialization.editor.meta.DoubleFieldAdapter
@@ -60,12 +59,11 @@ data class RollRewardCrateHologramLineData(
         }
 
         val itemFrames: MutableList<Pair<Int, LineSettings>> = rewardEntries.map { entry ->
-            switchTicks to ItemHologramLine.Settings(
-                item = entry.item.clone(),
+            switchTicks to RewardShowcaseHologramLine.Settings(
+                rewardShowcase = entry.showcase,
                 height = itemHeight,
-                scale = itemScale.toFloat(),
+                scale = itemScale.toFloat().coerceAtLeast(0.01f),
                 billboard = itemBillboard,
-                itemDisplayTransform = itemDisplayTransform,
                 filter = { true },
                 failLine = null,
                 transformationDuration = itemTransformationDuration,
@@ -76,7 +74,7 @@ data class RollRewardCrateHologramLineData(
 
         val textFrames: MutableList<Pair<Int, LineSettings>> = rewardEntries.map { entry ->
             switchTicks to TextHologramLine.Settings(
-                height = textHeight,
+                height = textLineHeight(entry),
                 text = entry.displayName,
                 lineWidth = textLineWidth,
                 scale = textScale.toFloat(),
@@ -88,7 +86,11 @@ data class RollRewardCrateHologramLineData(
                 transformationDuration = textTransformationDuration,
                 failLine = null,
                 teleportInterpolation = textTeleportInterpolation,
-                translation = Vector3f(textTranslationX.toFloat(), textTranslationY.toFloat(), textTranslationZ.toFloat())
+                translation = Vector3f(
+                    (itemTranslationX + textTranslationX).toFloat(),
+                    (itemTranslationY + textTranslationY).toFloat(),
+                    (itemTranslationZ + textTranslationZ).toFloat()
+                )
             )
         }.toMutableList()
 
@@ -106,6 +108,11 @@ data class RollRewardCrateHologramLineData(
                 failLine = null
             )
         )
+    }
+
+    private fun textLineHeight(entry: RewardHologramEntry): Double {
+        val offsetSpacing = (entry.showcase.displayNameYOffset() * 2.0 - itemHeight).coerceAtLeast(0.01)
+        return maxOf(textHeight, offsetSpacing)
     }
 
     companion object {

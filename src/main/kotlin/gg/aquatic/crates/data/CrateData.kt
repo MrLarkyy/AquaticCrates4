@@ -8,10 +8,8 @@ import gg.aquatic.crates.data.interactable.CrateInteractableData
 import gg.aquatic.crates.data.item.StackedItemData
 import gg.aquatic.crates.data.price.OpenPriceGroupData
 import gg.aquatic.crates.data.processor.BasicRewardProcessorData
-import gg.aquatic.crates.data.processor.ChooseRewardProcessorData
-import gg.aquatic.crates.data.processor.RewardProcessorType
-import gg.aquatic.crates.data.provider.ConditionalPoolsRewardProviderData
-import gg.aquatic.crates.data.provider.RewardProviderType
+import gg.aquatic.crates.data.processor.RewardProcessorData
+import gg.aquatic.crates.data.provider.RewardProviderData
 import gg.aquatic.crates.data.provider.SimpleRewardProviderData
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
@@ -41,12 +39,8 @@ data class CrateData(
     val rarities: Map<String, RewardRarityData> = mapOf(
         DEFAULT_RARITY_ID to RewardRarityData(displayName = "<gray>Default")
     ),
-    val rewardProviderType: String = RewardProviderType.SIMPLE.id,
-    val simpleProvider: SimpleRewardProviderData = SimpleRewardProviderData(),
-    val conditionalPoolsProvider: ConditionalPoolsRewardProviderData = ConditionalPoolsRewardProviderData(),
-    val rewardProcessorType: String = RewardProcessorType.BASIC.id,
-    val basicProcessor: BasicRewardProcessorData = BasicRewardProcessorData(),
-    val chooseProcessor: ChooseRewardProcessorData = ChooseRewardProcessorData(),
+    val rewardProvider: @Polymorphic RewardProviderData = SimpleRewardProviderData(),
+    val rewardProcessor: @Polymorphic RewardProcessorData = BasicRewardProcessorData(),
     val hologram: CrateHologramData? = null,
     val preview: PreviewMenuData? = PreviewMenuData(),
 ) {

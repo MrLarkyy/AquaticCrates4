@@ -5,9 +5,9 @@ import gg.aquatic.crates.data.RewardData
 import gg.aquatic.crates.data.RewardDataEditorSchema
 import gg.aquatic.crates.data.normalized
 import gg.aquatic.crates.data.condition.PlayerConditionData
-import gg.aquatic.crates.data.condition.PlayerConditionSelectionMenu
-import gg.aquatic.crates.data.condition.definePlayerConditionEditor
-import gg.aquatic.crates.data.editor.encodeToNode
+import gg.aquatic.crates.data.condition.editor.PlayerConditionSelectionMenu
+import gg.aquatic.crates.data.condition.editor.definePlayerConditionEditor
+import gg.aquatic.crates.data.editor.core.encodeToNode
 import gg.aquatic.crates.data.normalizeRewardChances
 import gg.aquatic.crates.reward.provider.RewardPool
 import gg.aquatic.crates.reward.runtime.RewardRuntimeFactory
@@ -97,7 +97,7 @@ data class RewardPoolData(
                 mapKeyPrompt = "Enter reward ID:",
                 newMapEntryFactory = EditorEntryFactories.map(
                     keyPrompt = "Enter reward ID:",
-                    keyValidator = { if (gg.aquatic.crates.data.editor.CrateEditorValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
+                    keyValidator = { if (gg.aquatic.crates.data.validation.CrateDataValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
                     valueFactory = { rewardId ->
                         gg.aquatic.crates.data.CrateDataFormats.yaml.encodeToNode(
                             RewardData.serializer(),
@@ -120,3 +120,4 @@ data class RewardPoolData(
         }
     }
 }
+

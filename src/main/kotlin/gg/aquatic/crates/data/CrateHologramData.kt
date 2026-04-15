@@ -3,7 +3,7 @@ package gg.aquatic.crates.data
 import gg.aquatic.crates.data.hologram.CrateHologramLineData
 import gg.aquatic.crates.data.hologram.RewardHologramEntry
 import gg.aquatic.crates.data.hologram.HologramLineSelectionMenu
-import gg.aquatic.crates.data.hologram.defineHologramLineEditor
+import gg.aquatic.crates.data.hologram.editor.defineHologramLineEditor
 import gg.aquatic.kholograms.Hologram
 import gg.aquatic.waves.serialization.editor.meta.IntFieldAdapter
 import gg.aquatic.waves.serialization.editor.meta.IntFieldConfig
@@ -62,3 +62,4 @@ data class CrateHologramData(
         }
     }
 }
+

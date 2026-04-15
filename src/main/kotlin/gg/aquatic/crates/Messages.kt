@@ -107,6 +107,33 @@ enum class Messages(
         placeholders = listOf("%player%", "%amount%", "%key_type%"),
         icon = Material.TRIPWIRE_HOOK
     ),
+    KEYS_GIVEN_ALL_SELF(
+        path = "keys-given-all-self",
+        displayName = "Keys Given All Self",
+        description = listOf("Shown when a player uses giveall and also receives the crate key themselves."),
+        placeholders = listOf("%crate_id%", "%amount%", "%key_type%"),
+        icon = Material.TRIPWIRE_HOOK
+    ),
+    KEYS_GIVEN_ALL_TARGET(
+        path = "keys-given-all-target",
+        displayName = "Keys Given All Target",
+        description = listOf("Shown to online players who receive keys from giveall."),
+        placeholders = listOf("%crate_id%", "%amount%", "%key_type%"),
+        icon = Material.TRIPWIRE_HOOK
+    ),
+    KEYS_GIVEN_ALL_SENDER(
+        path = "keys-given-all-sender",
+        displayName = "Keys Given All Sender",
+        description = listOf("Shown to the sender after giving one crate key to all players."),
+        placeholders = listOf("%crate_id%", "%amount%", "%key_type%", "%player_count%"),
+        icon = Material.TRIPWIRE_HOOK
+    ),
+    KEYS_OFFLINE_REQUIRES_VIRTUAL(
+        path = "keys-offline-requires-virtual",
+        displayName = "Keys Offline Requires Virtual",
+        description = listOf("Shown when -off is used without -v for giveall."),
+        icon = Material.BARRIER
+    ),
     KEY_BANK(
         path = "key-bank",
         displayName = "Key Bank",

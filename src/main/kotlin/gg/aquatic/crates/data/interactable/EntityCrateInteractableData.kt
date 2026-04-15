@@ -1,6 +1,7 @@
 package gg.aquatic.crates.data.interactable
 
 import gg.aquatic.clientside.serialize.ClientsideEntitySettings
+import gg.aquatic.crates.data.interactable.editor.defineInteractableViewRangeEditor
 import gg.aquatic.waves.serialization.editor.meta.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -36,13 +37,7 @@ data class EntityCrateInteractableData(
                 displayName = "Entity Type",
                 description = listOf("Entity type used for this clientside interactable.")
             )
-            field(
-                EntityCrateInteractableData::viewRange,
-                IntFieldAdapter,
-                IntFieldConfig(prompt = "Enter interactable view range:", min = 1),
-                displayName = "View Range",
-                description = listOf("Maximum distance where this clientside interactable stays visible.")
-            )
+            defineInteractableViewRangeEditor(EntityCrateInteractableData::viewRange)
             defineInteractableOffsetEditor(
                 EntityCrateInteractableData::offsetX,
                 EntityCrateInteractableData::offsetY,

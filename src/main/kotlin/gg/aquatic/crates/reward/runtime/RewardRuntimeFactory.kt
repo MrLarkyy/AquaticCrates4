@@ -4,6 +4,7 @@ import gg.aquatic.common.toMMComponent
 import gg.aquatic.crates.data.RewardData
 import gg.aquatic.crates.reward.Reward
 import gg.aquatic.crates.reward.RewardPurchaseHandler
+import gg.aquatic.crates.reward.showcase.RewardShowcaseRuntimeFactory
 import gg.aquatic.kmenu.inventory.ButtonType
 
 object RewardRuntimeFactory {
@@ -16,6 +17,7 @@ object RewardRuntimeFactory {
     ): Reward {
         val previewItemStack = data.previewItem.asStacked().getItem()
         val fallbackItemStack = data.fallbackPreviewItem?.asStacked()?.getItem()
+        val showcase = RewardShowcaseRuntimeFactory.create(data) { previewItemStack.clone() }
         val purchaseManager = data.cost.firstOrNull { it.prices.isNotEmpty() }
             ?.toOpenPriceGroup(crateId, crateKeyItem)
             ?.let { priceGroup ->
@@ -33,6 +35,7 @@ object RewardRuntimeFactory {
             fallbackItem = fallbackItemStack?.let { built -> { built.clone() } },
             winActions = data.winActions.map { it.toActionHandle() },
             massWinActions = data.massWinActions.map { it.toActionHandle() },
+            showcase = showcase,
             conditions = data.conditions.map { it.toConditionHandle() },
             purchaseManager = purchaseManager,
             amountRanges = data.amountRanges.map { it.toRange() },

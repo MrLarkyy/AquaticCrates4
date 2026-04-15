@@ -24,7 +24,7 @@ class ChooseRewardProcessor(
         provider: ResolvedRewardProvider,
     ): List<RolledReward> {
         val offerCount = if (provider.rewardCountRanges.isEmpty()) 1 else provider.rewardCountRanges.randomItem().roll()
-        val offeredRewards = provider.rollRewards(player, countOverride = offerCount, unique = uniqueRewards)
+        val offeredRewards = rewardRolls(player, provider, countOverride = offerCount, unique = uniqueRewards)
             .take(menu.rewardSlots.size)
         if (offeredRewards.isEmpty()) {
             return emptyList()

@@ -1,15 +1,26 @@
 package gg.aquatic.crates.data
 
-import gg.aquatic.crates.data.action.RewardActionSelectionMenu
-import gg.aquatic.crates.data.action.defineRewardActionEditor
-import gg.aquatic.crates.data.condition.PlayerConditionSelectionMenu
-import gg.aquatic.crates.data.condition.definePlayerConditionEditor
+import gg.aquatic.crates.data.action.editor.RewardActionSelectionMenu
+import gg.aquatic.crates.data.action.editor.defineRewardActionEditor
+import gg.aquatic.crates.data.condition.editor.PlayerConditionSelectionMenu
+import gg.aquatic.crates.data.condition.editor.definePlayerConditionEditor
+import gg.aquatic.crates.data.editor.core.findByPath
+import gg.aquatic.crates.data.editor.core.mapValue
+import gg.aquatic.crates.data.editor.core.switchingSection
 import gg.aquatic.crates.data.editor.RewardRarityFieldAdapter
+import gg.aquatic.crates.data.editor.core.stringContentOrNull
 import gg.aquatic.crates.data.item.StackedItemData
+import gg.aquatic.crates.data.item.StackedItemDataEditor.defineBasicEditor
 import gg.aquatic.crates.data.price.OpenPriceGroupData
 import gg.aquatic.crates.data.range.RewardAmountRangeData
+import gg.aquatic.crates.data.rewardshowcase.BetterModelRewardShowcaseData
+import gg.aquatic.crates.data.rewardshowcase.ItemDisplayRewardShowcaseData
+import gg.aquatic.crates.data.rewardshowcase.ModelEngineRewardShowcaseData
+import gg.aquatic.crates.data.rewardshowcase.RewardShowcaseType
+import gg.aquatic.crates.data.rewardshowcase.editor.RewardShowcaseSectionFieldAdapter
 import gg.aquatic.waves.serialization.editor.meta.DoubleFieldAdapter
 import gg.aquatic.waves.serialization.editor.meta.DoubleFieldConfig
+import gg.aquatic.waves.serialization.editor.meta.EditorFieldContext
 import gg.aquatic.waves.serialization.editor.meta.TextFieldAdapter
 import gg.aquatic.waves.serialization.editor.meta.TextFieldConfig
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
@@ -17,6 +28,7 @@ import org.bukkit.Material
 
 object RewardDataEditorSchema {
     fun TypedNestedSchemaBuilder<RewardData>.defineEditor() {
+        field(RewardData::rewardShowcaseType, visibleWhen = { false })
         field(
             RewardData::displayName,
             TextFieldAdapter,
@@ -156,5 +168,61 @@ object RewardDataEditorSchema {
                 )
             }
         }
+        switchingSection(
+            RewardData::itemDisplayShowcase,
+            adapter = RewardShowcaseSectionFieldAdapter,
+            displayName = "Reward Showcase",
+            iconMaterial = Material.ENDER_EYE,
+            description = listOf(
+                "Controls how this reward is shown in world-based processors and presentations.",
+                "Left click to edit showcase settings.",
+                "Right click to change the showcase type."
+            ),
+            searchTags = listOf("showcase", "reward showcase", "world display", "world choose", "presentation"),
+            visibleWhen = { it.isRewardShowcaseType(RewardShowcaseType.ITEM_DISPLAY) }
+        ) {
+            with(ItemDisplayRewardShowcaseData) { defineEditor() }
+        }
+        switchingSection(
+            RewardData::modelEngineShowcase,
+            adapter = RewardShowcaseSectionFieldAdapter,
+            displayName = "Reward Showcase",
+            iconMaterial = Material.ENDER_EYE,
+            description = listOf(
+                "Controls how this reward is shown in world-based processors and presentations.",
+                "Left click to edit showcase settings.",
+                "Right click to change the showcase type."
+            ),
+            searchTags = listOf("showcase", "reward showcase", "world display", "world choose", "presentation", "meg", "modelengine"),
+            visibleWhen = { it.isRewardShowcaseType(RewardShowcaseType.MODEL_ENGINE) }
+        ) {
+            with(ModelEngineRewardShowcaseData) { defineEditor() }
+        }
+        switchingSection(
+            RewardData::betterModelShowcase,
+            adapter = RewardShowcaseSectionFieldAdapter,
+            displayName = "Reward Showcase",
+            iconMaterial = Material.ENDER_EYE,
+            description = listOf(
+                "Controls how this reward is shown in world-based processors and presentations.",
+                "Left click to edit showcase settings.",
+                "Right click to change the showcase type."
+            ),
+            searchTags = listOf("showcase", "reward showcase", "world display", "world choose", "presentation", "bettermodel", "bm"),
+            visibleWhen = { it.isRewardShowcaseType(RewardShowcaseType.BETTER_MODEL) }
+        ) {
+            with(BetterModelRewardShowcaseData) { defineEditor() }
+        }
+    }
+
+    private fun EditorFieldContext.isRewardShowcaseType(type: RewardShowcaseType): Boolean {
+        val candidates = (pathSegments.size downTo 0).map { pathSegments.take(it) }
+        val ownerType = candidates.firstNotNullOfOrNull { candidate ->
+            root.findByPath(candidate)
+                ?.mapValue("rewardShowcaseType")
+                ?.stringContentOrNull
+        }
+        return RewardShowcaseType.of(ownerType ?: RewardShowcaseType.ITEM_DISPLAY.id) == type
     }
 }
+

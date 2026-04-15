@@ -1,6 +1,10 @@
 package gg.aquatic.crates.reward
 import gg.aquatic.crates.limit.LimitHandle
 import gg.aquatic.crates.limit.LimitService
+import gg.aquatic.crates.data.rewardshowcase.ItemDisplayRewardShowcaseData
+import gg.aquatic.crates.reward.showcase.RewardShowcase
+import gg.aquatic.crates.reward.showcase.ItemDisplayRewardShowcase
+import gg.aquatic.crates.util.replaceCratePlaceholders
 import gg.aquatic.crates.util.replacePlayerPlaceholder
 import gg.aquatic.crates.util.Weightable
 import gg.aquatic.crates.util.randomItem
@@ -24,6 +28,10 @@ class Reward(
     val fallbackItem: (() -> ItemStack)?,
     val winActions: Collection<ActionHandle<Player>>,
     val massWinActions: Collection<ActionHandle<Player>>,
+    val showcase: RewardShowcase = ItemDisplayRewardShowcase(
+        data = ItemDisplayRewardShowcaseData(),
+        itemSupplier = previewItem
+    ),
     val conditions: Collection<ConditionHandle<Player>>,
     val purchaseManager: RewardPurchaseHandler?,
     val amountRanges: Collection<RewardAmountRange>,
@@ -112,18 +120,22 @@ class Reward(
 
         return str
             .replacePlayerPlaceholder(player)
-            .replace("%reward-id%", id)
-            .replace("%reward-name%", PlainTextComponentSerializer.plainText().serialize(displayName))
-            .replace("%reward-rarity-id%", rarity.id)
-            .replace("%reward-rarity-name%", PlainTextComponentSerializer.plainText().serialize(rarity.displayName))
-            .replace("%reward-chance%", chanceRaw)
-            .replace("%reward-chance-formatted%", chanceFormatted)
-            .replace("%reward-real-chance%", chanceFormatted)
-            .replace("%reward-real-chance-formatted%", chanceFormatted)
-            .replace("%reward-win-count%", winCount.toString())
-            .replace("%reward-drawn-count%", winCount.toString())
-            .replace("%reward-total-amount%", totalAmount.toString())
-            .replace("%reward-total-random-amount%", totalAmount.toString())
+            .replaceCratePlaceholders(
+                mapOf(
+                    "%reward-id%" to id,
+                    "%reward-name%" to PlainTextComponentSerializer.plainText().serialize(displayName),
+                    "%reward-rarity-id%" to rarity.id,
+                    "%reward-rarity-name%" to PlainTextComponentSerializer.plainText().serialize(rarity.displayName),
+                    "%reward-chance%" to chanceRaw,
+                    "%reward-chance-formatted%" to chanceFormatted,
+                    "%reward-real-chance%" to chanceFormatted,
+                    "%reward-real-chance-formatted%" to chanceFormatted,
+                    "%reward-win-count%" to winCount.toString(),
+                    "%reward-drawn-count%" to winCount.toString(),
+                    "%reward-total-amount%" to totalAmount.toString(),
+                    "%reward-total-random-amount%" to totalAmount.toString(),
+                )
+            )
     }
 
     private fun formatChanceValue(value: Double): String {

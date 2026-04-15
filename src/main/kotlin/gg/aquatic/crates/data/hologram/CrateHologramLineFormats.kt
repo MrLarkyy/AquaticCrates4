@@ -1,9 +1,9 @@
 package gg.aquatic.crates.data.hologram
 
 import com.charleskorn.kaml.YamlNode
-import gg.aquatic.crates.data.editor.createPolymorphicYaml
-import gg.aquatic.crates.data.editor.encodeToNode
-import gg.aquatic.crates.data.editor.PolymorphicSelectionMenu
+import gg.aquatic.crates.data.editor.polymorphic.createPolymorphicYaml
+import gg.aquatic.crates.data.editor.core.encodeToNode
+import gg.aquatic.crates.data.editor.polymorphic.PolymorphicSelectionMenu
 import gg.aquatic.waves.serialization.editor.meta.EntryFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.PolymorphicSerializer

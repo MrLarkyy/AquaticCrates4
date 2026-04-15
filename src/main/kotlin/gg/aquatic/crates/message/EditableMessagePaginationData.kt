@@ -3,6 +3,7 @@ package gg.aquatic.crates.message
 import gg.aquatic.common.toMMComponent
 import gg.aquatic.klocale.impl.paper.PaginationSettings
 import gg.aquatic.klocale.impl.paper.replacePlaceholders
+import gg.aquatic.crates.message.editor.defineMessageLineEditor
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
 import kotlinx.serialization.Serializable
 import org.bukkit.Material

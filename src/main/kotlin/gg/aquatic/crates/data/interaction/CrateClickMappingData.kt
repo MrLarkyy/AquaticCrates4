@@ -1,5 +1,8 @@
 package gg.aquatic.crates.data.interaction
 
+import gg.aquatic.crates.data.interaction.editor.CrateClickActionEntryFieldAdapter
+import gg.aquatic.crates.data.interaction.editor.CrateClickActionSelectionMenu
+import gg.aquatic.crates.data.interaction.editor.defineCrateClickActionEditor
 import gg.aquatic.crates.interact.CrateClickType
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
 import kotlinx.serialization.Polymorphic

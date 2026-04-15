@@ -4,9 +4,9 @@ import com.charleskorn.kaml.YamlNode
 import gg.aquatic.crates.data.CrateData
 import gg.aquatic.crates.data.CrateDataFormats
 import gg.aquatic.crates.data.MilestoneData
-import gg.aquatic.crates.data.editor.RootSectionFieldAdapter
-import gg.aquatic.crates.data.editor.encodeToNode
-import gg.aquatic.crates.data.editor.withMapValue
+import gg.aquatic.crates.data.editor.core.RootSectionFieldAdapter
+import gg.aquatic.crates.data.editor.core.encodeToNode
+import gg.aquatic.crates.data.editor.core.withMapValue
 import gg.aquatic.stacked.stackedItem
 import gg.aquatic.waves.serialization.editor.meta.EditorFieldContext
 import kotlinx.serialization.builtins.ListSerializer
@@ -47,7 +47,7 @@ object MilestoneSettingsSectionFieldAdapter : RootSectionFieldAdapter<MilestoneS
         return MilestoneSettingsData.from(crateData)
     }
 
-    override fun updateRoot(root: YamlNode, edited: MilestoneSettingsData): YamlNode {
+    override fun updateRoot(context: EditorFieldContext, root: YamlNode, edited: MilestoneSettingsData): YamlNode {
         return root
             .withMapValue(
                 "milestones",

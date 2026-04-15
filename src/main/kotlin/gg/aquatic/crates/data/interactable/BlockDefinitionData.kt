@@ -2,7 +2,7 @@ package gg.aquatic.crates.data.interactable
 
 import gg.aquatic.blokk.Blokk
 import gg.aquatic.blokk.BlokkSerializer
-import gg.aquatic.crates.data.editor.CrateEditorValidators
+import gg.aquatic.crates.data.validation.CrateDataValidators
 import gg.aquatic.waves.serialization.editor.meta.*
 import kotlinx.serialization.Serializable
 import org.bukkit.Material
@@ -55,7 +55,7 @@ data class BlockDefinitionData(
                 TextFieldAdapter,
                 TextFieldConfig(
                     prompt = "Enter block material or factory:id:",
-                    validator = CrateEditorValidators::validateBlockMaterialLike
+                    validator = CrateDataValidators::validateBlockMaterialLike
                 ),
                 displayName = "$titlePrefix Material",
                 description = materialDescription
@@ -86,7 +86,7 @@ data class BlockDefinitionData(
                 description = listOf("Enabled faces used by multiple-facing block data."),
                 newValueFactory = EditorEntryFactories.text(
                     prompt = "Enter block face:",
-                    validator = CrateEditorValidators::validateBlockFace
+                    validator = CrateDataValidators::validateBlockFace
                 )
             )
             field(

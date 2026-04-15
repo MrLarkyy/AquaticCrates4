@@ -1,7 +1,7 @@
 package gg.aquatic.crates.data.hologram
 
 import gg.aquatic.common.toMMComponent
-import gg.aquatic.crates.data.editor.CrateEditorValidators
+import gg.aquatic.crates.data.validation.CrateDataValidators
 import gg.aquatic.kholograms.line.TextHologramLine
 import gg.aquatic.waves.serialization.editor.meta.*
 import kotlinx.serialization.SerialName
@@ -159,7 +159,7 @@ data class TextCrateHologramLineData(
         }
 
         private fun parseColor(raw: String): Color? {
-            return if (CrateEditorValidators.isValidColor(raw)) {
+            return if (CrateDataValidators.isValidColor(raw)) {
                 val value = raw.trim()
                 if (value.startsWith("#")) {
                     Color.fromRGB(

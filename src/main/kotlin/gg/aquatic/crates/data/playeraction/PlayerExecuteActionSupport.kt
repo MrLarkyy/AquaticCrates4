@@ -6,7 +6,6 @@ import gg.aquatic.crates.interact.CrateClickBinder
 import gg.aquatic.crates.interact.PlayerProxyCrateClickActions
 import gg.aquatic.execute.Action
 import gg.aquatic.execute.ActionHandle
-import gg.aquatic.execute.action.impl.ActionbarAction
 import gg.aquatic.execute.action.impl.CloseInventory
 import gg.aquatic.execute.action.impl.CommandAction
 import gg.aquatic.execute.action.impl.SoundAction
@@ -27,8 +26,18 @@ object PlayerExecuteActionHandles {
     fun rewardMessage(lines: List<String>): ActionHandle<Player> =
         handle(MessageAction, mapOf("message" to PaperMessage.of(lines.map(String::toMMComponent))))
 
-    fun rewardActionbar(message: String): ActionHandle<Player> =
-        handle(ActionbarAction, mapOf("message" to message))
+    fun rewardActionbar(message: String, persistent: Boolean, durationTicks: Int): ActionHandle<Player> =
+        handle(
+            ShowActionbarPlayerAction,
+            mapOf(
+                "message" to message,
+                "persistent" to persistent,
+                "duration-ticks" to durationTicks,
+            )
+        )
+
+    fun rewardClearActionbar(): ActionHandle<Player> =
+        handle(ClearActionbarPlayerAction)
 
     fun rewardCommand(commands: List<String>, playerExecutor: Boolean): ActionHandle<Player> =
         handle(CommandAction, mapOf("command" to commands, "player-executor" to playerExecutor))
@@ -44,6 +53,26 @@ object PlayerExecuteActionHandles {
             TitleAction,
             mapOf("title" to title, "subtitle" to subtitle, "fade-in" to fadeIn, "stay" to stay, "fade-out" to fadeOut)
         )
+
+    fun rewardShowBossbar(
+        id: String,
+        title: String,
+        progress: Double,
+        color: String,
+        overlay: String,
+    ): ActionHandle<Player> = handle(
+        ShowBossbarPlayerAction,
+        mapOf(
+            "id" to id,
+            "title" to title,
+            "progress" to progress.toFloat(),
+            "color" to color,
+            "overlay" to overlay,
+        )
+    )
+
+    fun rewardHideBossbar(id: String): ActionHandle<Player> =
+        handle(HideBossbarPlayerAction, mapOf("id" to id))
 
     fun rewardCloseInventory(): ActionHandle<Player> =
         handle(CloseInventory)
@@ -132,7 +161,7 @@ object PlayerExecuteActionEditors {
             soundProperty,
             TextFieldAdapter,
             TextFieldConfig(prompt = "Enter sound key:"),
-            displayName = "Sound",
+            displayName = "Sound Key",
             description = listOf("Namespaced sound key that should be played.")
         )
         field(
@@ -159,7 +188,7 @@ object PlayerExecuteActionEditors {
             property,
             TextFieldAdapter,
             TextFieldConfig(prompt = prompt),
-            displayName = "Sound",
+            displayName = "Sound Key",
             description = listOf("Namespaced sound key that should be stopped.")
         )
     }

@@ -1,6 +1,7 @@
 package gg.aquatic.crates.data.hologram
 
 import gg.aquatic.crates.data.item.StackedItemData
+import gg.aquatic.crates.data.item.StackedItemDataEditor
 import gg.aquatic.kholograms.line.ItemHologramLine
 import gg.aquatic.waves.serialization.editor.meta.*
 import kotlinx.serialization.SerialName
@@ -42,7 +43,7 @@ data class ItemCrateHologramLineData(
     companion object {
         fun TypedNestedSchemaBuilder<ItemCrateHologramLineData>.defineEditor() {
             group(ItemCrateHologramLineData::item) {
-                with(StackedItemData) {
+                with(StackedItemDataEditor) {
                     defineBasicEditor(
                         materialLabel = "Item Material",
                         nameLabel = "Item Name",

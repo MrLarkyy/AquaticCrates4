@@ -1,13 +1,16 @@
 package gg.aquatic.crates.data.processor
 
+import gg.aquatic.crates.data.processor.editor.RewardDisplayMenuSectionFieldAdapter
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bukkit.Material
 
 @Serializable
+@SerialName("basic")
 data class BasicRewardProcessorData(
     val resultMenu: RewardDisplayMenuData? = null,
-) {
+) : RewardProcessorData() {
     companion object {
         fun TypedNestedSchemaBuilder<BasicRewardProcessorData>.defineEditor() {
             field(

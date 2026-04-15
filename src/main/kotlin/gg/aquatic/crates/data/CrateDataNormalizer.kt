@@ -4,7 +4,6 @@ import gg.aquatic.crates.data.processor.RewardProcessorType
 import gg.aquatic.crates.data.provider.RewardProviderType
 
 fun CrateData.normalized(crateId: String? = null, existingCrateIds: Set<String> = emptySet()): CrateData {
-    val normalizedProviderType = RewardProviderType.of(rewardProviderType).id
     val normalizedRarities = rarities
         .mapNotNull { (rarityId, data) ->
             rarityId.trim()
@@ -18,11 +17,17 @@ fun CrateData.normalized(crateId: String? = null, existingCrateIds: Set<String> 
 
     return copy(
         rarities = normalizedRarities,
-        rewardProviderType = normalizedProviderType,
-        simpleProvider = simpleProvider.normalized(availableRarityIds, fallbackRarityId, crateId, existingCrateIds),
-        conditionalPoolsProvider = conditionalPoolsProvider.normalized(availableRarityIds, fallbackRarityId, crateId, existingCrateIds),
-        rewardProcessorType = RewardProcessorType.of(rewardProcessorType).id,
-        chooseProcessor = chooseProcessor.normalized(),
+        rewardProvider = when (val provider = rewardProvider) {
+            is gg.aquatic.crates.data.provider.SimpleRewardProviderData ->
+                provider.normalized(availableRarityIds, fallbackRarityId, crateId, existingCrateIds)
+            is gg.aquatic.crates.data.provider.ConditionalPoolsRewardProviderData ->
+                provider.normalized(availableRarityIds, fallbackRarityId, crateId, existingCrateIds)
+        },
+        rewardProcessor = when (val processor = rewardProcessor) {
+            is gg.aquatic.crates.data.processor.BasicRewardProcessorData -> processor
+            is gg.aquatic.crates.data.processor.ChooseRewardProcessorData -> processor.normalized()
+            is gg.aquatic.crates.data.processor.WorldChooseRewardProcessorData -> processor.normalized()
+        },
         limits = limits.map { it.normalized() }.distinctBy { it.timeframe },
         milestones = milestones
             .map { it.normalized(availableRarityIds, fallbackRarityId, crateId, existingCrateIds) }

@@ -1,6 +1,6 @@
 package gg.aquatic.crates.data.interactable
 
-import gg.aquatic.crates.data.editor.yamlScalar
+import gg.aquatic.crates.data.editor.core.yamlScalar
 import gg.aquatic.waves.serialization.editor.meta.EditorEntryFactories
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
 import kotlinx.serialization.Serializable

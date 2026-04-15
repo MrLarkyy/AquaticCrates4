@@ -3,6 +3,7 @@ package gg.aquatic.crates.await
 import kotlinx.coroutines.awaitAll
 
 private val startupDependencyAwaiters: List<StartupDependencyAwaiter> = listOf(
+    BetterModelStartupAwaiter,
     ItemsAdderStartupAwaiter,
     ModelEngineStartupAwaiter,
 )

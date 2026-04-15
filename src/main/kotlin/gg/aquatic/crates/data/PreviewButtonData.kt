@@ -1,12 +1,13 @@
 package gg.aquatic.crates.data
 
 import gg.aquatic.crates.data.action.RewardActionData
-import gg.aquatic.crates.data.action.RewardActionSelectionMenu
-import gg.aquatic.crates.data.action.defineRewardActionEditor
+import gg.aquatic.crates.data.action.editor.RewardActionSelectionMenu
+import gg.aquatic.crates.data.action.editor.defineRewardActionEditor
 import gg.aquatic.crates.data.condition.PlayerConditionData
-import gg.aquatic.crates.data.condition.PlayerConditionSelectionMenu
-import gg.aquatic.crates.data.condition.definePlayerConditionEditor
+import gg.aquatic.crates.data.condition.editor.PlayerConditionSelectionMenu
+import gg.aquatic.crates.data.condition.editor.definePlayerConditionEditor
 import gg.aquatic.crates.data.item.StackedItemData
+import gg.aquatic.crates.data.item.StackedItemDataEditor
 import gg.aquatic.execute.checkConditions
 import gg.aquatic.execute.executeActions
 import gg.aquatic.kmenu.inventory.ButtonType
@@ -59,7 +60,7 @@ data class PreviewButtonData(
     companion object {
         fun TypedNestedSchemaBuilder<PreviewButtonData>.defineEditor() {
             group(PreviewButtonData::item) {
-                with(StackedItemData) {
+                with(StackedItemDataEditor) {
                     defineBasicEditor(
                         materialLabel = "Button Material",
                         nameLabel = "Button Name",
@@ -100,3 +101,4 @@ data class PreviewButtonData(
         }
     }
 }
+

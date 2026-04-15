@@ -2,6 +2,7 @@ package gg.aquatic.crates.data.key
 
 import gg.aquatic.crates.data.interaction.CrateClickMappingData
 import gg.aquatic.crates.data.item.StackedItemData
+import gg.aquatic.crates.data.item.StackedItemDataEditor
 import gg.aquatic.crates.data.resolveCrateDataDescriptor
 import gg.aquatic.waves.serialization.editor.meta.EditableModel
 import gg.aquatic.waves.serialization.editor.meta.EditorFieldContext
@@ -13,7 +14,7 @@ object KeySettingsEditorSchema : EditableModel<KeySettingsData>(KeySettingsData.
 
     override fun TypedEditorSchemaBuilder<KeySettingsData>.define() {
         group(KeySettingsData::keyItem) {
-            with(StackedItemData) {
+            with(StackedItemDataEditor) {
                 defineFullEditor(
                     materialLabel = "Key Material",
                     materialPrompt = "Enter material or Factory:ItemId:",

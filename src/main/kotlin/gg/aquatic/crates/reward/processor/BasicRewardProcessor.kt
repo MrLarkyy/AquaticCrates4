@@ -15,7 +15,7 @@ class BasicRewardProcessor(
         crateHandle: CrateHandle?,
         provider: ResolvedRewardProvider,
     ): List<RolledReward> {
-        val rolledRewards = provider.rollRewards(player)
+        val rolledRewards = rewardRolls(player, provider)
         if (rolledRewards.isEmpty()) {
             return emptyList()
         }

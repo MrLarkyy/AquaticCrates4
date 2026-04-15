@@ -3,6 +3,10 @@ package gg.aquatic.crates.data.editor
 import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlNode
 import gg.aquatic.crates.data.PREVIEW_TYPE_AUTOMATIC
+import gg.aquatic.crates.data.editor.core.SwitchingSectionFieldAdapter
+import gg.aquatic.crates.data.editor.core.stringContentOrNull
+import gg.aquatic.crates.data.editor.core.withMapValue
+import gg.aquatic.crates.data.editor.core.yamlScalar
 import gg.aquatic.waves.serialization.editor.meta.EditorFieldContext
 import gg.aquatic.waves.serialization.editor.meta.FieldEditResult
 import org.bukkit.Material

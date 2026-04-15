@@ -32,8 +32,6 @@ class NormalizationTest {
     fun `crate normalization ensures default rarity and sorted milestones`() {
         val data = CrateData(
             rarities = emptyMap(),
-            rewardProviderType = "unknown",
-            rewardProcessorType = "unknown",
             limits = listOf(
                 LimitData(CrateStatsTimeframe.MONTH, 0),
                 LimitData(CrateStatsTimeframe.MONTH, 5)

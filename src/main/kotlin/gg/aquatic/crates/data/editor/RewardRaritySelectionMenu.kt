@@ -1,5 +1,6 @@
 package gg.aquatic.crates.data.editor
 
+import gg.aquatic.crates.data.editor.core.stringContentOrNull
 import gg.aquatic.crates.data.editor.menu.PagedSelectionMenu
 import gg.aquatic.kmenu.inventory.InventoryType
 import gg.aquatic.stacked.stackedItem

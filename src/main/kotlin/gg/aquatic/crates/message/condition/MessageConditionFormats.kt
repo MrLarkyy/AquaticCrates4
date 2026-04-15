@@ -1,7 +1,7 @@
 package gg.aquatic.crates.message.condition
 
 import com.charleskorn.kaml.YamlNode
-import gg.aquatic.crates.data.editor.encodeToNode
+import gg.aquatic.crates.data.editor.core.encodeToNode
 import gg.aquatic.crates.message.MessagesFormats
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.PolymorphicSerializer

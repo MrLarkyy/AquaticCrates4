@@ -1,5 +1,19 @@
 package gg.aquatic.crates.data
 
+import com.charleskorn.kaml.YamlMap
+import com.charleskorn.kaml.YamlNode
+import gg.aquatic.crates.data.editor.core.encodeToNode
+import gg.aquatic.crates.data.editor.core.mapValue
+import gg.aquatic.crates.data.editor.core.withMapValue
+import gg.aquatic.crates.data.processor.BasicRewardProcessorData
+import gg.aquatic.crates.data.processor.ChooseRewardProcessorData
+import gg.aquatic.crates.data.processor.RewardProcessorData
+import gg.aquatic.crates.data.processor.RewardProcessorType
+import gg.aquatic.crates.data.processor.WorldChooseRewardProcessorData
+import gg.aquatic.crates.data.provider.ConditionalPoolsRewardProviderData
+import gg.aquatic.crates.data.provider.RewardProviderData
+import gg.aquatic.crates.data.provider.RewardProviderType
+import gg.aquatic.crates.data.provider.SimpleRewardProviderData
 import gg.aquatic.crates.CratesPlugin
 import gg.aquatic.crates.crate.Crate
 import gg.aquatic.crates.yaml.encodeCompactString
@@ -78,7 +92,8 @@ object CrateStorage {
     }
 
     private fun decodeCrateData(content: String): CrateData {
-        return yaml.decodeFromYamlNode(CrateData.serializer(), yaml.parseCompactNode(content))
+        val parsed = yaml.parseCompactNode(content)
+        return yaml.decodeFromYamlNode(CrateData.serializer(), migrateLegacyCrateNode(parsed))
     }
 
     private fun normalizeCrateData(id: String, crateData: CrateData, includeCurrentId: Boolean = false): CrateData {
@@ -106,5 +121,71 @@ object CrateStorage {
             .trim() == normalized
             .replace("\r\n", "\n")
             .trim()
+    }
+
+    private fun migrateLegacyCrateNode(root: YamlNode): YamlNode {
+        if (root !is YamlMap) {
+            return root
+        }
+
+        return root
+            .migrateLegacyRewardProvider()
+            .migrateLegacyRewardProcessor()
+    }
+
+    private fun YamlNode.migrateLegacyRewardProvider(): YamlNode {
+        if (mapValue("rewardProvider") != null) {
+            return this
+        }
+
+        val type = mapValue("rewardProviderType")?.let {
+            RewardProviderType.of(yaml.decodeFromYamlNode(kotlinx.serialization.serializer<String>(), it)).id
+        } ?: return this
+
+        val data = when (RewardProviderType.of(type)) {
+            RewardProviderType.SIMPLE -> {
+                val legacy = mapValue("simpleProvider")
+                if (legacy != null) yaml.decodeFromYamlNode(SimpleRewardProviderData.serializer(), legacy) else SimpleRewardProviderData()
+            }
+            RewardProviderType.CONDITIONAL_POOLS -> {
+                val legacy = mapValue("conditionalPoolsProvider")
+                if (legacy != null) yaml.decodeFromYamlNode(ConditionalPoolsRewardProviderData.serializer(), legacy) else ConditionalPoolsRewardProviderData()
+            }
+        }
+
+        return withMapValue(
+            "rewardProvider",
+            yaml.encodeToNode(RewardProviderData.serializer(), data)
+        )
+    }
+
+    private fun YamlNode.migrateLegacyRewardProcessor(): YamlNode {
+        if (mapValue("rewardProcessor") != null) {
+            return this
+        }
+
+        val type = mapValue("rewardProcessorType")?.let {
+            RewardProcessorType.of(yaml.decodeFromYamlNode(kotlinx.serialization.serializer<String>(), it)).id
+        } ?: return this
+
+        val data = when (RewardProcessorType.of(type)) {
+            RewardProcessorType.BASIC -> {
+                val legacy = mapValue("basicProcessor")
+                if (legacy != null) yaml.decodeFromYamlNode(BasicRewardProcessorData.serializer(), legacy) else BasicRewardProcessorData()
+            }
+            RewardProcessorType.CHOOSE -> {
+                val legacy = mapValue("chooseProcessor")
+                if (legacy != null) yaml.decodeFromYamlNode(ChooseRewardProcessorData.serializer(), legacy) else ChooseRewardProcessorData()
+            }
+            RewardProcessorType.WORLD_CHOOSE -> {
+                val legacy = mapValue("worldChooseProcessor")
+                if (legacy != null) yaml.decodeFromYamlNode(WorldChooseRewardProcessorData.serializer(), legacy) else WorldChooseRewardProcessorData()
+            }
+        }
+
+        return withMapValue(
+            "rewardProcessor",
+            yaml.encodeToNode(RewardProcessorData.serializer(), data)
+        )
     }
 }

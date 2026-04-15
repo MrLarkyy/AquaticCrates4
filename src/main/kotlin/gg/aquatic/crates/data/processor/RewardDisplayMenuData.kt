@@ -3,8 +3,8 @@ package gg.aquatic.crates.data.processor
 import gg.aquatic.common.toMMComponent
 import gg.aquatic.crates.data.CrateDataFormats
 import gg.aquatic.crates.data.PreviewButtonData
-import gg.aquatic.crates.data.editor.CrateEditorValidators
-import gg.aquatic.crates.data.editor.encodeToNode
+import gg.aquatic.crates.data.validation.CrateDataValidators
+import gg.aquatic.crates.data.editor.core.encodeToNode
 import gg.aquatic.crates.data.resolveCrateDataDescriptor
 import gg.aquatic.crates.data.menu.AnvilMenuRuntimeSettings
 import gg.aquatic.crates.data.menu.MenuInventoryData
@@ -87,7 +87,7 @@ data class RewardDisplayMenuData(
                 mapKeyPrompt = "Enter custom button ID:",
                 newMapEntryFactory = EditorEntryFactories.map(
                     keyPrompt = "Enter custom button ID:",
-                    keyValidator = { if (CrateEditorValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
+                    keyValidator = { if (CrateDataValidators.crateIdRegex.matches(it)) null else "Use only letters, numbers, '_' or '-'." },
                     valueFactory = { buttonId ->
                         CrateDataFormats.yaml.encodeToNode(
                             PreviewButtonData.serializer(),

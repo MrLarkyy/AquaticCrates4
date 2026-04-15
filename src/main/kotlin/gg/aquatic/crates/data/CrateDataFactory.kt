@@ -5,11 +5,10 @@ import gg.aquatic.crates.crate.Crate
 import gg.aquatic.crates.data.condition.CrateOpenConditionBinder
 import gg.aquatic.crates.data.hologram.RewardHologramEntry
 import gg.aquatic.crates.milestone.CrateMilestoneRuntimeFactory
-import gg.aquatic.crates.data.processor.RewardProcessorType
-import gg.aquatic.crates.data.provider.RewardProviderType
 import gg.aquatic.crates.reward.runtime.RewardRuntimeFactory
 import gg.aquatic.crates.reward.processor.BasicRewardProcessor
 import gg.aquatic.crates.reward.processor.ChooseRewardProcessor
+import gg.aquatic.crates.reward.processor.WorldChooseRewardProcessor
 import gg.aquatic.crates.reward.provider.ConditionalPoolsRewardProvider
 import gg.aquatic.crates.reward.provider.SimpleRewardProvider
 
@@ -55,40 +54,52 @@ fun CrateData.toCrate(id: String): Crate {
             )
         },
         rewardProviderSupplier = {
-            when (RewardProviderType.of(normalized.rewardProviderType)) {
-                RewardProviderType.CONDITIONAL_POOLS -> ConditionalPoolsRewardProvider(
-                    selectionMode = gg.aquatic.crates.data.provider.PoolSelectionMode.of(normalized.conditionalPoolsProvider.poolSelectionMode),
-                    fallbackPoolId = normalized.conditionalPoolsProvider.fallbackPoolId,
-                    pools = normalized.conditionalPoolsProvider.pools.mapValues { (poolId, poolData) ->
+            when (val provider = normalized.rewardProvider) {
+                is gg.aquatic.crates.data.provider.ConditionalPoolsRewardProviderData -> ConditionalPoolsRewardProvider(
+                    selectionMode = gg.aquatic.crates.data.provider.PoolSelectionMode.of(provider.poolSelectionMode),
+                    fallbackPoolId = provider.fallbackPoolId,
+                    pools = provider.pools.mapValues { (poolId, poolData) ->
                         poolData.toRewardPool(poolId, id, crateKeyItem, normalized.rarities)
                     },
-                    rewardCountRanges = normalized.conditionalPoolsProvider.rewardCountRanges.map { it.toRange() }
+                    rewardCountRanges = provider.rewardCountRanges.map { it.toRange() }
                 )
 
-                RewardProviderType.SIMPLE -> SimpleRewardProvider(
+                is gg.aquatic.crates.data.provider.SimpleRewardProviderData -> SimpleRewardProvider(
                     buildRewards(
                         rarities = normalized.rarities,
-                        rewards = normalized.simpleProvider.rewards,
+                        rewards = provider.rewards,
                         crateId = id,
                         crateKeyItem = crateKeyItem
                     ),
-                    rewardCountRanges = normalized.simpleProvider.rewardCountRanges.map { it.toRange() }
+                    rewardCountRanges = provider.rewardCountRanges.map { it.toRange() }
                 )
             }
         },
         rewardProcessorSupplier = {
-            when (RewardProcessorType.of(normalized.rewardProcessorType)) {
-                RewardProcessorType.CHOOSE -> ChooseRewardProcessor(
-                    chooseCountRanges = normalized.chooseProcessor.chooseCountRanges.map { it.toRange() },
-                    uniqueRewards = normalized.chooseProcessor.uniqueRewards,
-                    hiddenRewards = normalized.chooseProcessor.hiddenRewards,
-                    onSelectActions = normalized.chooseProcessor.onSelectActions.map { it.toActionHandle() },
-                    hiddenItem = normalized.chooseProcessor.hiddenItem.asStacked().getItem(),
-                    menu = normalized.chooseProcessor.menu.toMenuSettings(),
+            when (val processor = normalized.rewardProcessor) {
+                is gg.aquatic.crates.data.processor.ChooseRewardProcessorData -> ChooseRewardProcessor(
+                    chooseCountRanges = processor.chooseCountRanges.map { it.toRange() },
+                    uniqueRewards = processor.uniqueRewards,
+                    hiddenRewards = processor.hiddenRewards,
+                    onSelectActions = processor.onSelectActions.map { it.toActionHandle() },
+                    hiddenItem = processor.hiddenItem.asStacked().getItem(),
+                    menu = processor.menu.toMenuSettings(),
                 )
 
-                RewardProcessorType.BASIC -> BasicRewardProcessor(
-                    resultMenu = normalized.basicProcessor.resultMenu?.toMenuSettings()
+                is gg.aquatic.crates.data.processor.WorldChooseRewardProcessorData -> WorldChooseRewardProcessor(
+                    chooseCountRanges = processor.chooseCountRanges.map { it.toRange() },
+                    uniqueRewards = processor.uniqueRewards,
+                    hiddenRewards = processor.hiddenRewards,
+                    onStartActions = processor.onStartActions.map { it.toActionHandle() },
+                    onSwitchActions = processor.onSwitchActions.map { it.toActionHandle() },
+                    onChooseActions = processor.onChooseActions.map { it.toActionHandle() },
+                    onEndActions = processor.onEndActions.map { it.toActionHandle() },
+                    hiddenItem = processor.hiddenItem.asStacked().getItem(),
+                    display = processor.display.normalized(),
+                )
+
+                is gg.aquatic.crates.data.processor.BasicRewardProcessorData -> BasicRewardProcessor(
+                    resultMenu = processor.resultMenu?.toMenuSettings()
                 )
             }
         },
@@ -117,9 +128,9 @@ private fun buildRewards(
 
 private fun CrateData.rewardHologramEntries(): List<RewardHologramEntry> {
     val crateKeyItem = keyItem.asStacked().getItem()
-    val runtimeRewards = when (RewardProviderType.of(rewardProviderType)) {
-        RewardProviderType.CONDITIONAL_POOLS -> {
-            conditionalPoolsProvider.pools.flatMap { (poolId, poolData) ->
+    val runtimeRewards = when (val provider = rewardProvider) {
+        is gg.aquatic.crates.data.provider.ConditionalPoolsRewardProviderData -> {
+            provider.pools.flatMap { (poolId, poolData) ->
                 poolData.toRewardPool(
                     poolId = poolId,
                     crateId = "hologram-preview",
@@ -129,9 +140,9 @@ private fun CrateData.rewardHologramEntries(): List<RewardHologramEntry> {
             }
         }
 
-        RewardProviderType.SIMPLE -> buildRewards(
+        is gg.aquatic.crates.data.provider.SimpleRewardProviderData -> buildRewards(
             rarities = rarities,
-            rewards = simpleProvider.rewards,
+            rewards = provider.rewards,
             crateId = "hologram-preview",
             crateKeyItem = crateKeyItem
         )
@@ -139,7 +150,7 @@ private fun CrateData.rewardHologramEntries(): List<RewardHologramEntry> {
 
     return runtimeRewards.map { reward ->
         RewardHologramEntry(
-            item = reward.previewItem(),
+            showcase = reward.showcase,
             displayName = reward.displayName
         )
     }

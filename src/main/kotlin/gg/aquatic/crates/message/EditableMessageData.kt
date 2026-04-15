@@ -3,9 +3,10 @@ package gg.aquatic.crates.message
 import gg.aquatic.common.argument.ObjectArguments
 import gg.aquatic.common.toMMComponent
 import gg.aquatic.crates.data.action.RewardActionData
-import gg.aquatic.crates.data.action.RewardActionSelectionMenu
-import gg.aquatic.crates.data.action.defineRewardActionEditor
-import gg.aquatic.crates.data.editor.encodeToNode
+import gg.aquatic.crates.data.action.editor.RewardActionSelectionMenu
+import gg.aquatic.crates.data.action.editor.defineRewardActionEditor
+import gg.aquatic.crates.data.editor.core.encodeToNode
+import gg.aquatic.crates.message.editor.defineMessageLineEditor
 import gg.aquatic.klocale.impl.paper.PaperMessage
 import gg.aquatic.crates.message.runtime.EditableMessageRuntimeFactory
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
@@ -88,3 +89,4 @@ data class EditableMessageData(
         }
     }
 }
+

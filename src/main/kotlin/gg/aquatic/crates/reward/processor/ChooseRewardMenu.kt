@@ -106,14 +106,7 @@ class ChooseRewardMenu private constructor(
         completed = true
         refreshRewardButtons()
 
-        val selectedRewards = buildList {
-            selectedIndices.forEach { index ->
-                val rolled = rewards.getOrNull(index) ?: return@forEach
-                if (rolled.reward.tryWin(player, rolled.amount)) {
-                    add(rolled)
-                }
-            }
-        }
+        val selectedRewards = selectedIndices.mapNotNull(rewards::getOrNull)
         onCompleted(selectedRewards)
         if (closeMenu) {
             close()

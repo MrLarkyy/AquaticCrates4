@@ -1,10 +1,12 @@
 package gg.aquatic.crates.data.interactable
 
 import gg.aquatic.clientside.serialize.ClientsideMEGSettings
-import gg.aquatic.crates.data.editor.CrateEditorValidators
-import gg.aquatic.waves.serialization.editor.meta.*
+import gg.aquatic.crates.data.interactable.editor.defineModelBackedInteractableEditor
+import gg.aquatic.crates.data.validation.CrateDataValidators
+import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.bukkit.Material
 
 @Serializable
 @SerialName("meg")
@@ -26,27 +28,16 @@ data class MEGCrateInteractableData(
 
     companion object {
         fun TypedNestedSchemaBuilder<MEGCrateInteractableData>.defineEditor() {
-            field(
+            defineModelBackedInteractableEditor(
                 MEGCrateInteractableData::modelId,
-                TextFieldAdapter,
-                TextFieldConfig(
-                    prompt = "Enter MEG model id:",
-                    validator = CrateEditorValidators::validateModelEngineModel
-                ),
-                displayName = "Model Id",
-                description = listOf("ModelEngine model id used for this clientside interactable.")
-            )
-            field(
                 MEGCrateInteractableData::viewRange,
-                IntFieldAdapter,
-                IntFieldConfig(prompt = "Enter interactable view range:", min = 1),
-                displayName = "View Range",
-                description = listOf("Maximum distance where this clientside interactable stays visible.")
-            )
-            defineInteractableOffsetEditor(
                 MEGCrateInteractableData::offsetX,
                 MEGCrateInteractableData::offsetY,
-                MEGCrateInteractableData::offsetZ
+                MEGCrateInteractableData::offsetZ,
+                prompt = "Enter MEG model id:",
+                validator = CrateDataValidators::validateModelEngineModel,
+                description = "ModelEngine model id used for this clientside interactable.",
+                modelIcon = Material.ARMOR_STAND,
             )
         }
     }

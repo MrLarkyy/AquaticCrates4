@@ -1,12 +1,13 @@
 package gg.aquatic.crates.data.menu
 
-import gg.aquatic.crates.data.action.RewardActionSelectionMenu
-import gg.aquatic.crates.data.action.defineRewardActionEditor
+import gg.aquatic.crates.data.action.editor.RewardActionSelectionMenu
+import gg.aquatic.crates.data.action.editor.defineRewardActionEditor
 import gg.aquatic.crates.data.action.RewardActionData
 import gg.aquatic.crates.data.editor.InventoryTypeFieldAdapter
-import gg.aquatic.crates.data.editor.mapValue
-import gg.aquatic.crates.data.editor.stringContentOrNull
+import gg.aquatic.crates.data.editor.core.mapValue
+import gg.aquatic.crates.data.editor.core.stringContentOrNull
 import gg.aquatic.crates.data.item.StackedItemData
+import gg.aquatic.crates.data.item.StackedItemDataEditor
 import gg.aquatic.execute.ActionHandle
 import gg.aquatic.kmenu.inventory.AnvilInventoryType
 import gg.aquatic.kmenu.inventory.InventoryType
@@ -101,7 +102,7 @@ data class AnvilMenuInventoryData(
                 description = listOf("If enabled, the anvil menu closes after the confirm button is clicked.")
             )
             group(AnvilMenuInventoryData::confirmItem) {
-                with(StackedItemData) {
+        with(StackedItemDataEditor) {
                     defineBasicEditor(
                         materialLabel = "Confirm Material",
                         nameLabel = "Confirm Name",
@@ -183,3 +184,4 @@ private fun EditorFieldContext.currentInventoryType(): String {
 
     return (rootType ?: "GENERIC9X3").uppercase()
 }
+

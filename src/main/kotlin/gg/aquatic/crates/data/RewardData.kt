@@ -5,6 +5,10 @@ import gg.aquatic.crates.data.condition.PlayerConditionData
 import gg.aquatic.crates.data.item.StackedItemData
 import gg.aquatic.crates.data.price.OpenPriceGroupData
 import gg.aquatic.crates.data.range.RewardAmountRangeData
+import gg.aquatic.crates.data.rewardshowcase.BetterModelRewardShowcaseData
+import gg.aquatic.crates.data.rewardshowcase.ItemDisplayRewardShowcaseData
+import gg.aquatic.crates.data.rewardshowcase.ModelEngineRewardShowcaseData
+import gg.aquatic.crates.data.rewardshowcase.RewardShowcaseType
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import org.bukkit.Material
@@ -22,4 +26,8 @@ data class RewardData(
     val amountRanges: List<RewardAmountRangeData> = emptyList(),
     val winActions: List<@Polymorphic RewardActionData> = emptyList(),
     val massWinActions: List<@Polymorphic RewardActionData> = emptyList(),
+    val rewardShowcaseType: String = RewardShowcaseType.ITEM_DISPLAY.id,
+    val itemDisplayShowcase: ItemDisplayRewardShowcaseData = ItemDisplayRewardShowcaseData(),
+    val modelEngineShowcase: ModelEngineRewardShowcaseData = ModelEngineRewardShowcaseData(),
+    val betterModelShowcase: BetterModelRewardShowcaseData = BetterModelRewardShowcaseData(),
 )

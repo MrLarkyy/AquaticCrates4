@@ -1,5 +1,6 @@
 package gg.aquatic.crates.data.hologram
 
+import gg.aquatic.crates.data.hologram.editor.defineHologramFrameLineEditor
 import gg.aquatic.kholograms.line.AnimatedHologramLine
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
 import kotlinx.serialization.SerialName

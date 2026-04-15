@@ -12,14 +12,15 @@ import org.bukkit.entity.Player
 @Serializable
 @SerialName("stop-sound")
 data class StopSoundRewardActionData(
-    val sound: String = "minecraft:entity.player.levelup"
+    @SerialName("sound")
+    val soundKey: String = "minecraft:entity.player.levelup"
 ) : RewardActionData() {
-    override fun toActionHandle(): ActionHandle<Player> = PlayerExecuteActionHandles.rewardStopSound(sound)
+    override fun toActionHandle(): ActionHandle<Player> = PlayerExecuteActionHandles.rewardStopSound(soundKey)
 
     companion object {
         fun TypedNestedSchemaBuilder<StopSoundRewardActionData>.defineEditor() {
             defineStopSoundEditor(
-                StopSoundRewardActionData::sound,
+                StopSoundRewardActionData::soundKey,
                 "Enter sound key to stop:"
             )
         }

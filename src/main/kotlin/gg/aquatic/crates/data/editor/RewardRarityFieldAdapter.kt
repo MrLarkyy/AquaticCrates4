@@ -1,5 +1,7 @@
 package gg.aquatic.crates.data.editor
 
+import gg.aquatic.crates.data.editor.core.stringContentOrNull
+import gg.aquatic.crates.data.editor.core.yamlScalar
 import gg.aquatic.stacked.stackedItem
 import gg.aquatic.waves.serialization.editor.meta.EditorFieldAdapter
 import gg.aquatic.waves.serialization.editor.meta.EditorFieldContext

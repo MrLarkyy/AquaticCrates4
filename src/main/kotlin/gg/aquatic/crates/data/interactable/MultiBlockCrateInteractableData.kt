@@ -4,10 +4,9 @@ import gg.aquatic.blokk.BlockShape
 import gg.aquatic.blokk.MultiBlokk
 import gg.aquatic.clientside.serialize.ClientsideMultiBlockSettings
 import gg.aquatic.crates.data.CrateDataFormats
-import gg.aquatic.crates.data.editor.encodeToNode
+import gg.aquatic.crates.data.editor.core.encodeToNode
+import gg.aquatic.crates.data.interactable.editor.defineInteractableViewRangeEditor
 import gg.aquatic.waves.serialization.editor.meta.EditorEntryFactories
-import gg.aquatic.waves.serialization.editor.meta.IntFieldAdapter
-import gg.aquatic.waves.serialization.editor.meta.IntFieldConfig
 import gg.aquatic.waves.serialization.editor.meta.TypedNestedSchemaBuilder
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -88,13 +87,7 @@ data class MultiBlockCrateInteractableData(
                     defineEditor()
                 }
             }
-            field(
-                MultiBlockCrateInteractableData::viewRange,
-                IntFieldAdapter,
-                IntFieldConfig(prompt = "Enter interactable view range:", min = 1),
-                displayName = "View Range",
-                description = listOf("Maximum distance where this clientside interactable stays visible.")
-            )
+            defineInteractableViewRangeEditor(MultiBlockCrateInteractableData::viewRange)
             defineInteractableOffsetEditor(
                 MultiBlockCrateInteractableData::offsetX,
                 MultiBlockCrateInteractableData::offsetY,

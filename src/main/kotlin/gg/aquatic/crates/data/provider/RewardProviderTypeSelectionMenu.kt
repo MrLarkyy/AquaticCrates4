@@ -1,6 +1,6 @@
 package gg.aquatic.crates.data.provider
 
-import gg.aquatic.crates.data.editor.PolymorphicSelectionMenu
+import gg.aquatic.crates.data.editor.polymorphic.PolymorphicSelectionMenu
 import gg.aquatic.kmenu.inventory.InventoryType
 import org.bukkit.Material
 import org.bukkit.entity.Player
