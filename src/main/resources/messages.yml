@@ -1,369 +1,400 @@
-help:
-  pagination:
-    page-size: 9
-    header: null
-    footer:
-      components:
-        - text: "<#18788C>[← Previous]"
-          hover:
-            - "<gray>Open the previous help page."
-          click:
-            type: PAGE
-            value: "prev"
-          visibility-conditions:
-            - type: has-previous-page
-        - text: " <gray>| "
-          visibility-conditions:
-            - type: has-previous-page
-            - type: has-next-page
-        - text: "<#3EC4DE>[Next →]"
-          hover:
-            - "<gray>Open the next help page."
-          click:
-            type: PAGE
-            value: "next"
-          visibility-conditions:
-            - type: has-next-page
-      visibility-conditions:
-        - type: has-next-or-previous-page
-  lines:
-    - components:
-        - text: " "
-    - components:
-        - text: " <#9BE0EE>⬛⬛⬛⬛⬛⬛                   <underlined><#3EC4DE>AquaticCrates"
-    - components:
-        - text: " <#3EC4DE>⬛        ⬛"
-    - components:
-        - text: "<#18788C>⬛⬛⬛⬛⬛⬛⬛           <white>Welcome on the help page!"
-    - components:
-        - text: " <#3EC4DE>⬛   <#18788C>⬛<#3EC4DE>   ⬛"
-    - components:
-        - text: " <#3EC4DE>⬛        ⬛                "
-        - text: "<#6E7EF0>[Discord]"
-          hover:
-            - "<gray>Click to open Aquatic Discord."
-          click:
-            type: OPEN_URL
-            value: "https://discord.com/invite/ffKAAQwNdC"
-        - text: " "
-        - text: "<#8AE3D9>[Wiki]"
-          hover:
-            - "<gray>Click to open the documentation."
-          click:
-            type: OPEN_URL
-            value: "https://mrlarkyy.gitbook.io/aquaticcrates-v3"
-    - components:
-        - text: "<#18788C>⬛⬛<#3EC4DE>⬛⬛⬛<#18788C>⬛⬛"
-    - components:
-        - text: "<#18788C>⬛⬛      ⬛⬛  "
-        - text: "<#68A6E8>[BuiltByBit]"
-          hover:
-            - "<gray>Open the BuiltByBit profile."
-          click:
-            type: OPEN_URL
-            value: "https://builtbybit.com/members/larkyy.122935"
-        - text: " "
-        - text: "<#B082F5>[Patreon]"
-          hover:
-            - "<gray>Open the Patreon page."
-          click:
-            type: OPEN_URL
-            value: "https://www.patreon.com/c/aquaticgg"
-    - components:
-        - text: " "
-    - components:
-        - text: "<#18788C><bold>|</bold> "
-        - text: "<#3EC4DE>/aqcrates crate menu"
-          hover:
-            - "<white>Open the in-game crate management menu."
-            - ""
-            - "<gray>Click to suggest this command."
-          click:
-            type: SUGGEST_COMMAND
-            value: "/aqcrates crate menu"
-    - components:
-        - text: "<#18788C><bold>|</bold> "
-        - text: "<#3EC4DE>/aqcrates crate edit <gray><crate-id>"
-          hover:
-            - "<white>Edit an existing crate."
-            - ""
-            - "<gray>Click to suggest this command."
-          click:
-            type: SUGGEST_COMMAND
-            value: "/aqcrates crate edit "
-    - components:
-        - text: "<#18788C><bold>|</bold> "
-        - text: "<#3EC4DE>/aqcrates crate give <gray><crate-id>"
-          hover:
-            - "<white>Give yourself a crate item."
-            - ""
-            - "<gray>Click to suggest this command."
-          click:
-            type: SUGGEST_COMMAND
-            value: "/aqcrates crate give "
-    - components:
-        - text: "<#18788C><bold>|</bold> "
-        - text: "<#3EC4DE>/aqcrates crate open <gray><crate-id> [player] [amount] [-nokey]"
-          hover:
-            - "<white>Open a crate for a player."
-            - ""
-            - "<gray>Arguments:"
-            - "<gray><crate-id> <white>= target crate id"
-            - "<gray>[player] <white>= target player, defaults to self"
-            - "<gray>[amount] <white>= open amount, defaults to 1"
-            - ""
-            - "<gray>Flags:"
-            - "<gray>-nokey <white>= bypass held key requirement"
-            - ""
-            - "<gray>Click to suggest this command."
-          click:
-            type: SUGGEST_COMMAND
-            value: "/aqcrates crate open "
-    - components:
-        - text: "<#18788C><bold>|</bold> "
-        - text: "<#3EC4DE>/aqcrates key give <gray><crate-id> [player] [amount] [-v] [-s]"
-          hover:
-            - "<white>Give crate keys."
-            - ""
-            - "<gray>Arguments:"
-            - "<gray><crate-id> <white>= target crate id"
-            - "<gray>[player] <white>= target player, defaults to self"
-            - "<gray>[amount] <white>= key amount, defaults to 1"
-            - ""
-            - "<gray>Flags:"
-            - "<gray>-v <white>= virtual keys"
-            - "<gray>-s <white>= silent"
-            - ""
-            - "<gray>Click to suggest this command."
-          click:
-            type: SUGGEST_COMMAND
-            value: "/aqcrates key give "
-    - components:
-        - text: "<#18788C><bold>|</bold> "
-        - text: "<#3EC4DE>/aqcrates key bank <gray>[player]"
-          hover:
-            - "<white>Show virtual key balances."
-            - ""
-            - "<gray>Arguments:"
-            - "<gray>[player] <white>= target player, defaults to self"
-            - ""
-            - "<gray>Permission:"
-            - "<gray>aqcrates.admin.keybank.others <white>= view other players"
-            - ""
-            - "<gray>Click to suggest this command."
-          click:
-            type: SUGGEST_COMMAND
-            value: "/aqcrates key bank "
-    - components:
-        - text: "<#18788C><bold>|</bold> "
-        - text: "<#3EC4DE>/aqcrates messages"
-          hover:
-            - "<white>Open the in-game messages editor."
-            - ""
-            - "<gray>Click to suggest this command."
-          click:
-            type: SUGGEST_COMMAND
-            value: "/aqcrates messages"
-    - components:
-        - text: "<#18788C><bold>|</bold> "
-        - text: "<#3EC4DE>/aqcrates reload"
-          hover:
-            - "<white>Reload crates, messages and runtime registries."
-            - ""
-            - "<gray>Click to run this command."
-          click:
-            type: RUN_COMMAND
-            value: "/aqcrates reload"
-    - components:
-        - text: "<#18788C><bold>|</bold> "
-        - text: "<#3EC4DE>/aqcrates stats invalidate"
-          hover:
-            - "<white>Delete obsolete stats rows for removed crates."
-            - "<white>Also removes hourly buckets older than 31 days."
-            - ""
-            - "<gray>Click to run this command."
-          click:
-            type: RUN_COMMAND
-            value: "/aqcrates stats invalidate"
-  actions: []
-
-crate-given:
-  lines:
-    - components:
-        - text: "<green>You have been given the crate!"
-  actions: []
-
-crate-open-self-requires-player:
-  lines:
-    - components:
-        - text: "<red>You must specify a player when running this command from console!"
-  actions: []
-
-crate-opened-self:
-  lines:
-    - components:
-        - text: "<green>Opened <yellow>%amount%x</yellow> <gold>%crate_id%</gold> for yourself."
-  actions: []
-
-crate-opened-target:
-  lines:
-    - components:
-        - text: "<green><yellow>%amount%x</yellow> <gold>%crate_id%</gold> has been opened for you."
-  actions: []
-
-crate-opened-sender:
-  lines:
-    - components:
-        - text: "<green>Opened <yellow>%amount%x</yellow> <gold>%crate_id%</gold> for <yellow>%player%</yellow>."
-  actions: []
-
-crate-open-key-required:
-  lines:
-    - components:
-        - text: "<red><gold>%crate_id%</gold> requires the target player to hold its key. Use <yellow>-nokey</yellow> to bypass."
-  actions: []
-
-crate-open-failed:
-  lines:
-    - components:
-        - text: "<red>Failed to open <gold>%crate_id%</gold> <yellow>%amount%x</yellow>."
-  actions: []
-
-keys-self-requires-player:
-  lines:
-    - components:
-        - text: "<red>You must be a player to give yourself keys!"
-  actions: []
-
-keys-given-self:
-  lines:
-    - components:
-        - text: "<green>You have been given <yellow>%amount%x</yellow> <gold>%key_type%</gold> key!"
-  actions: []
-
-keys-given-target:
-  lines:
-    - components:
-        - text: "<green>You have been given <yellow>%amount%x</yellow> <gold>%key_type%</gold> key!"
-  actions: []
-
-keys-given-sender:
-  lines:
-    - components:
-        - text: "<green>You have given <yellow>%player%</yellow> <yellow>%amount%x</yellow> <gold>%key_type%</gold> key!"
-  actions: []
-
-key-bank:
-  pagination:
-    page-size: 8
-    header:
-      components:
-        - text: "<#18788C><bold>|</bold> <#3EC4DE>%player%'s Virtual Key Bank"
-    footer:
-      components:
-        - text: "<#18788C>[← Previous]"
-          hover:
-            - "<gray>Open the previous page."
-          click:
-            type: PAGE
-            value: "prev"
-          visibility-conditions:
-            - type: has-previous-page
-        - text: " <gray>| "
-          visibility-conditions:
-            - type: has-previous-page
-            - type: has-next-page
-        - text: "<#3EC4DE>[Next →]"
-          hover:
-            - "<gray>Open the next page."
-          click:
-            type: PAGE
-            value: "next"
-          visibility-conditions:
-            - type: has-next-page
-      visibility-conditions:
-        - type: has-next-or-previous-page
-  lines:
-    - components:
-        - text: "<#18788C><bold>|</bold> <yellow>%crate_name%</yellow> <gray>(<white>%crate_id%</white>)<gray>: <aqua>%amount%</aqua>"
-  actions: []
-
-key-bank-empty:
-  lines:
-    - components:
-        - text: "<red>%player% has no virtual keys."
-  actions: []
-
-no-permission:
-  lines:
-    - components:
-        - text: "<red>You do not have permission to do that."
-  actions: []
-
-plugin-reloading:
-  lines:
-    - components:
-        - text: "<yellow>Reloading..."
-  actions: []
-
-plugin-reloaded:
-  lines:
-    - components:
-        - text: "<green>Reloaded!"
-  actions: []
-
-stats-invalidated:
-  lines:
-    - components:
-        - text: "<green>Stats invalidation finished. Deleted <yellow>%total_deleted%</yellow> rows in total."
-    - components:
-        - text: "<gray>Openings: <white>%deleted_openings%</white>, opening rewards: <white>%deleted_opening_rewards%</white>"
-    - components:
-        - text: "<gray>Hourly crate buckets: <white>%deleted_hourly_crate_buckets%</white>, hourly reward buckets: <white>%deleted_hourly_reward_buckets%</white>"
-    - components:
-        - text: "<gray>Alltime crate rows: <white>%deleted_alltime_crate_rows%</white>, alltime reward rows: <white>%deleted_alltime_reward_rows%</white>"
-    - components:
-        - text: "<gray>Expired hourly crate buckets: <white>%deleted_expired_hourly_crate_buckets%</white>, expired hourly reward buckets: <white>%deleted_expired_hourly_reward_buckets%</white>"
-  actions: []
-
-crate-placed:
-  lines:
-    - components:
-        - text: "<green>You have placed the crate!"
-  actions: []
-
-crate-destroyed:
-  lines:
-    - components:
-        - text: "<red>Crate destroyed!"
-  actions: []
-
-crate-saved:
-  lines:
-    - components:
-        - text: "<green>Saved crate '<yellow>%crate_id%</yellow>'."
-  actions: []
-
-crate-create-prompt:
-  lines:
-    - components:
-        - text: "<aqua>Enter new crate ID:"
-  actions: []
-
-crate-invalid-id:
-  lines:
-    - components:
-        - text: "<red>Invalid crate ID. Use only letters, numbers, '_' or '-'."
-  actions: []
-
-crate-already-exists:
-  lines:
-    - components:
-        - text: "<red>Crate '<yellow>%crate_id%</yellow>' already exists."
-  actions: []
-
-crate-editor-open-failed:
-  lines:
-    - components:
-        - text: "<red>Failed to open crate editor: <yellow>%reason%</yellow>"
-  actions: []
+"help":
+  "lines":
+  - "components":
+    - "text": " "
+  - "components":
+    - "text": " <#9BE0EE>⬛⬛⬛⬛⬛⬛                   <underlined><#3EC4DE>AquaticCrates"
+  - "components":
+    - "text": " <#3EC4DE>⬛        ⬛"
+  - "components":
+    - "text": "<#18788C>⬛⬛⬛⬛⬛⬛⬛           <#E5DBD1>Welcome to the help page!"
+  - "components":
+    - "text": " <#3EC4DE>⬛   <#18788C>⬛<#3EC4DE>   ⬛"
+  - "components":
+    - "text": " <#3EC4DE>⬛        ⬛                 "
+    - "text": "<#6E7EF0>[ᴅɪsᴄᴏʀᴅ]"
+      "hover":
+      - "<gray>Click to open the Aquatic Discord."
+      "click":
+        "type": "OPEN_URL"
+        "value": "https://discord.com/invite/ffKAAQwNdC"
+    - "text": " "
+    - "text": "<#8AE3D9>[ᴅᴏᴄs]"
+      "hover":
+      - "<gray>Click to open the documentation."
+      "click":
+        "type": "OPEN_URL"
+        "value": "https://docs.aquatic.gg/aquaticcrates/acrates-introduction"
+  - "components":
+    - "text": "<#18788C>⬛⬛<#3EC4DE>⬛⬛⬛<#18788C>⬛⬛"
+  - "components":
+    - "text": "<#18788C>⬛⬛      ⬛⬛            "
+    - "text": "<#68A6E8>[ʙᴜɪʟᴛʙʏʙɪᴛ]"
+      "hover":
+      - "<gray>Open the BuiltByBit profile."
+      "click":
+        "type": "OPEN_URL"
+        "value": "https://builtbybit.com/members/larkyy.122935"
+    - "text": " "
+    - "text": "<#B082F5>[ᴘᴀᴛʀᴇᴏɴ]"
+      "hover":
+      - "<gray>Open the Patreon page."
+      "click":
+        "type": "OPEN_URL"
+        "value": "https://www.patreon.com/c/aquaticgg"
+  - "components":
+    - "text": " "
+  - "components":
+    - "text": " "
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates crate menu"
+      "hover":
+      - "<#E5DBD1>Open the in-game crate management menu."
+      - ""
+      - "<gray>Click to run this command."
+      "click":
+        "type": "RUN_COMMAND"
+        "value": "/aqcrates crate menu"
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates crate edit <#E5DBD1><crate-id>"
+      "hover":
+      - "<#E5DBD1>Edit an existing crate."
+      - ""
+      - "<gray>Click to suggest this command."
+      "click":
+        "type": "SUGGEST_COMMAND"
+        "value": "/aqcrates crate edit "
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates crate give <#E5DBD1><crate-id>"
+      "hover":
+      - "<#E5DBD1>Give yourself a crate item."
+      - ""
+      - "<gray>Click to suggest this command."
+      "click":
+        "type": "SUGGEST_COMMAND"
+        "value": "/aqcrates crate give "
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates crate open <#E5DBD1><crate-id> [player] [amount] -nokey]"
+      "hover":
+      - "<#E5DBD1>Open a crate for a player."
+      - ""
+      - "<gray>Arguments:"
+      - "<gray><crate-id> <dark_gray>| <#E5DBD1>Target crate id"
+      - "<gray>[player] <dark_gray>| <#E5DBD1>Target player, defaults to self"
+      - "<gray>[amount] <dark_gray>| <#E5DBD1>Open amount, defaults to 1"
+      - ""
+      - "<gray>Flags:"
+      - "<gray>-nokey <dark_gray>| <#E5DBD1>Bypass held key requirement"
+      - ""
+      - "<gray>Click to suggest this command."
+      "click":
+        "type": "SUGGEST_COMMAND"
+        "value": "/aqcrates crate open "
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates key give <#E5DBD1><crate-id> [player] [amount] [-v] [-s]"
+      "hover":
+      - "<white>Give crate keys."
+      - ""
+      - "<gray>Arguments:"
+      - "<gray><crate-id> <dark_gray>| <#E5DBD1>Target crate id"
+      - "<gray>[player] <dark_gray>| <#E5DBD1>Target player, defaults to self"
+      - "<gray>[amount] <dark_gray>| <#E5DBD1>Key amount, defaults to 1"
+      - ""
+      - "<gray>Flags:"
+      - "<gray>-v <dark_gray>| <#E5DBD1>Virtual keys"
+      - "<gray>-s <dark_gray>| <#E5DBD1>Silent"
+      - ""
+      - "<gray>Click to suggest this command."
+      "click":
+        "type": "SUGGEST_COMMAND"
+        "value": "/aqcrates key give "
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates key giveall <#E5DBD1><crate-id> [amount] [-v] [-s] [-off]"
+      "hover":
+      - "<white>Give crate keys to all players."
+      - ""
+      - "<gray>Arguments:"
+      - "<gray><crate-id> <dark_gray>| <#E5DBD1>Target crate id"
+      - "<gray>[amount] <dark_gray>| <#E5DBD1>Key amount, defaults to 1"
+      - ""
+      - "<gray>Flags:"
+      - "<gray>-off <dark_gray>| <#E5DBD1>Give to offline players (requires -v)"
+      - "<gray>-v <dark_gray>| <#E5DBD1>Virtual keys"
+      - "<gray>-s <dark_gray>| <#E5DBD1>Silent"
+      - ""
+      - "<gray>Click to suggest this command."
+      "click":
+        "type": "SUGGEST_COMMAND"
+        "value": "/aqcrates key giveall "
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates key bank <#E5DBD1>[player]"
+      "hover":
+      - "<white>Show virtual key balances."
+      - ""
+      - "<gray>Arguments:"
+      - "<gray>[player] <dark_gray>| <#E5DBD1>Target player, defaults to self"
+      - ""
+      - "<gray>Permission:"
+      - "<gray>aqcrates.admin.keybank.others <dark_gray>| <#E5DBD1>View other players"
+      - ""
+      - "<gray>Click to suggest this command."
+      "click":
+        "type": "SUGGEST_COMMAND"
+        "value": "/aqcrates key bank "
+  - "components":
+    - "text": " "
+  - "components":
+    - "text": " "
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates messages"
+      "hover":
+      - "<#E5DBD1>Open the in-game messages editor."
+      - ""
+      - "<gray>Click to run this command."
+      "click":
+        "type": "RUN_COMMAND"
+        "value": "/aqcrates messages"
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates reload"
+      "hover":
+      - "<#E5DBD1>Reload crates, messages and runtime registries."
+      - ""
+      - "<gray>Click to run this command."
+      "click":
+        "type": "RUN_COMMAND"
+        "value": "/aqcrates reload"
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates stats invalidate"
+      "hover":
+      - "<#E5DBD1>Delete obsolete stats rows for removed crates."
+      - "<#E5DBD1>Also removes hourly buckets older than 31 days."
+      - ""
+      - "<gray>Click to run this command."
+      "click":
+        "type": "RUN_COMMAND"
+        "value": "/aqcrates stats invalidate"
+  - "components":
+    - "text": "<gray>➥ "
+    - "text": "<#3EC4DE>/aqcrates makevisible <#E5DBD1>[player]"
+      "hover":
+      - "<#E5DBD1>Make a player visible again if"
+      - "<#E5DBD1>an animation glitch made them invisible."
+      - ""
+      - "<gray>Click to suggest this command."
+      "click":
+        "type": "SUGGEST_COMMAND"
+        "value": "/aqcrates makevisible "
+  - "components":
+    - "text": " "
+  "pagination":
+    "page-size": 9
+    "footer":
+      "components":
+      - "text": "<#3EC4DE>[← Previous Page]"
+        "hover":
+        - "<gray>Open the previous help page."
+        "click":
+          "type": "PAGE"
+          "value": "prev"
+        "visibility-conditions":
+        - "type": "has-previous-page"
+      - "text": " <gray>| "
+        "visibility-conditions":
+        - "type": "has-previous-page"
+        - "type": "has-next-page"
+      - "text": "<#3EC4DE>[Next Page →]"
+        "hover":
+        - "<gray>Open the next help page."
+        "click":
+          "type": "PAGE"
+          "value": "next"
+        "visibility-conditions":
+        - "type": "has-next-page"
+      "visibility-conditions":
+      - "type": "has-next-or-previous-page"
+"crate-given":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>You have been given the crate!"
+"crate-open-self-requires-player":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>You must specify a player when running this command from console!"
+"crate-opened-self":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>Opened <#E5DBD1>%amount%x</#E5DBD1> <#3EC4DE>%crate_id%</#3EC4DE> for yourself."
+"crate-opened-target":
+  "lines":
+  - "components":
+    - "text": "<#90EF87><#E5DBD1>%amount%x</#E5DBD1> <#3EC4DE>%crate_id%</#3EC4DE> has been opened for you."
+"crate-opened-sender":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>Opened <#E5DBD1>%amount%x</#E5DBD1> <#3EC4DE>%crate_id%</#3EC4DE> for <#E5DBD1>%player%</#E5DBD1>."
+"crate-open-key-required":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>Crate <#3EC4DE>%crate_id%</#3EC4DE> requires the target player to hold its key. Use <#E5DBD1>-nokey</#E5DBD1> to bypass."
+"crate-open-failed":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>Failed to open crate <#3EC4DE>%crate_id%</#3EC4DE> <#E5DBD1>%amount%x</#E5DBD1>."
+"player-only-command":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>This command can only be used by a player."
+"player-not-found":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>Player '<#E5DBD1>%player%</#E5DBD1>' was not found."
+"keys-self-requires-player":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>You must be a player to give yourself keys!"
+"keys-given-self":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>You have been given <#E5DBD1>%amount%x</#E5DBD1> <#3EC4DE>%key_type%</#3EC4DE> key!"
+"keys-given-target":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>You have been given <#E5DBD1>%amount%x</#E5DBD1> <#3EC4DE>%key_type%</#3EC4DE> key!"
+"keys-given-sender":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>You have given <#6E7EF0>%player%</#6E7EF0> <#E5DBD1>%amount%x</#E5DBD1> <#3EC4DE>%key_type%</#3EC4DE> key!"
+"keys-given-all-self":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>You have been given <#E5DBD1>%amount%x</#E5DBD1> <#3EC4DE>%crate_id%</#3EC4DE> <#E5DBD1>%key_type%</#E5DBD1> key through giveall."
+"keys-given-all-target":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>You have been given <#E5DBD1>%amount%x</#E5DBD1> <#3EC4DE>%crate_id%</#3EC4DE> <#E5DBD1>%key_type%</#E5DBD1> key."
+"keys-given-all-sender":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>Given <#E5DBD1>%amount%x</#E5DBD1> <#3EC4DE>%crate_id%</#3EC4DE> <#E5DBD1>%key_type%</#E5DBD1> key to <#E5DBD1>%player_count%</#E5DBD1> players."
+"keys-offline-requires-virtual":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>Offline giveall requires <#E5DBD1>-v</#E5DBD1> because physical keys cannot be given offline."
+"key-bank":
+  "lines":
+  - "components":
+    - "text": "<gray>➥ <#3EC4DE>%crate_name%</#3EC4DE> (<#E5DBD1>%crate_id%</#E5DBD1>) <dark_gray>|</dark_gray> <#90EF87>%amount% Keys</#90EF87> "
+  "pagination":
+    "page-size": 8
+    "header":
+      "components":
+      - "text": "<#6E7EF0>%player%'s Virtual Key Bank:"
+    "footer":
+      "components":
+      - "text": "<#6E7EF0>[← Previous Page]"
+        "hover":
+        - "<gray>Open the previous page."
+        "click":
+          "type": "PAGE"
+          "value": "prev"
+        "visibility-conditions":
+        - "type": "has-previous-page"
+          "negate": false
+      - "text": " <gray>| "
+        "visibility-conditions":
+        - "type": "has-previous-page"
+          "negate": false
+        - "type": "has-next-page"
+          "negate": false
+      - "text": "<#6E7EF0>[Next Page →]"
+        "hover":
+        - "<gray>Open the next page."
+        "click":
+          "type": "PAGE"
+          "value": "next"
+        "visibility-conditions":
+        - "type": "has-next-page"
+          "negate": false
+      "visibility-conditions":
+      - "type": "has-next-or-previous-page"
+        "negate": false
+"key-bank-empty":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>%player% has no virtual keys."
+"no-permission":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>You do not have permission to do that."
+"plugin-reloading":
+  "lines":
+  - "components":
+    - "text": "<#E9F78D>AqCrates is reloading..."
+"plugin-reloaded":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>AqCrates has successfully reloaded!"
+"stats-invalidated":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>Stats invalidation finished. Deleted <#E5DBD1>%total_deleted%</#E5DBD1> rows in total."
+  - "components":
+    - "text": "<gray>Openings <dark_gray>| <#E5DBD1>%deleted_openings%</#E5DBD1>"
+  - "components":
+    - "text": "<gray>Opening Rewards <dark_gray>| <#E5DBD1>%deleted_opening_rewards%</#E5DBD1>"
+  - "components":
+    - "text": "<gray>Hourly Crate Buckets <dark_gray>| <#E5DBD1>%deleted_hourly_crate_buckets%</#E5DBD1>"
+  - "components":
+    - "text": "<gray>Hourly Reward Buckets <dark_gray>| <#E5DBD1>%deleted_hourly_reward_buckets%</#E5DBD1>"
+  - "components":
+    - "text": "<gray>Alltime Crate Rows <dark_gray>| <#E5DBD1>%deleted_alltime_crate_rows%</#E5DBD1>"
+  - "components":
+    - "text": "<gray>Alltime Reward Rows <dark_gray>| <#E5DBD1>%deleted_alltime_reward_rows%</#E5DBD1>"
+  - "components":
+    - "text": "<gray>Expired Hourly Crate Buckets <dark_gray>| <#E5DBD1>%deleted_expired_hourly_crate_buckets%</#E5DBD1>"
+  - "components":
+    - "text": "<gray>Expired Hourly Reward Buckets <dark_gray>| <#E5DBD1>%deleted_expired_hourly_reward_buckets%</#E5DBD1>"
+"crate-placed":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>You have placed the crate!"
+"crate-destroyed":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>Crate destroyed!"
+"crate-saved":
+  "lines":
+  - "components":
+    - "text": "<#90EF87>Saved crate '<#E5DBD1>%crate_id%</#E5DBD1>'."
+"crate-create-prompt":
+  "lines":
+  - "components":
+    - "text": "<gray><i>Type <#E5DBD1>cancel</#E5DBD1>' to stop a crate creation."
+  - "components":
+    - "text": "<#3EC4DE>Enter new crate ID:"
+"crate-invalid-id":
+  "lines":
+  - "components":
+    - "text": "<red>Invalid crate ID. Use only letters, numbers, '_' or '-'."
+"crate-not-found":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>Crate '<#3EC4DE>%crate_id%</#3EC4DE>' was not found."
+"crate-already-exists":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>Crate '<#E5DBD1>%crate_id%</#E5DBD1>' already exists."
+"crate-editor-open-failed":
+  "lines":
+  - "components":
+    - "text": "<#EC5656>Failed to open crate editor: <#E5DBD1>%reason%</#E5DBD1>"
