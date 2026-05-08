@@ -73,7 +73,7 @@ dependencies {
     compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.2-beta-r3-b")
     compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.9")
     compileOnly("io.github.toxicity188:bettermodel-bukkit-api:3.0.0")
-    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
     compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     compileOnly("com.charleskorn.kaml:kaml:0.104.0")
     compileOnly("org.jetbrains.exposed:exposed-core:$exposedVersion")
@@ -99,7 +99,7 @@ dependencies {
     testImplementation("com.zaxxer:HikariCP:7.0.2")
     testImplementation("org.mariadb.jdbc:mariadb-java-client:3.5.8")
     testImplementation("org.xerial:sqlite-jdbc:3.53.0.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 }
 
 kotlin {
