@@ -85,7 +85,7 @@ dependencies {
     implementation("org.reflections:reflections:0.10.2")
 
     // Testing
-    testImplementation("io.mockk:mockk:1.14.9")
+    testImplementation("io.mockk:mockk:1.14.11")
     testImplementation(kotlin("test"))
     testImplementation("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     testImplementation("gg.aquatic:Common:26.0.17")
