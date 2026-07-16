@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.3.20"
-    kotlin("plugin.serialization") version "2.3.20"
+    kotlin("plugin.serialization") version "2.4.10"
     id("com.gradleup.shadow") version "9.4.1"
     id("io.github.revxrsal.bukkitkobjects") version "0.1.1"
     id("co.uzzu.dotenv.gradle") version "4.0.0"
